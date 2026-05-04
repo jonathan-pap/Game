@@ -1,0 +1,24 @@
+# Consumables and key items. effect describes runtime behavior.
+- id: medical_herb
+  name: Medical Herb
+  type: consumable
+  price: 10
+  effect: { kind: heal_hp, amount: 20, target: ally }
+
+- id: healing_seed
+  name: Healing Seed
+  type: consumable
+  price: 80
+  effect: { kind: heal_hp, amount: 9999, target: ally } # full heal
+
+- id: antidote
+  name: Antidote
+  type: consumable
+  price: 20
+  effect: { kind: cure_status, status: poison, target: ally }
+
+- id: angel_wing
+  name: Angel Wing
+  type: consumable
+  price: 40
+  effect: { kind: warp_to_town, target: self }

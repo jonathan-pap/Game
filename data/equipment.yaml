@@ -1,0 +1,33 @@
+# Weapons and armor. classes_allowed is matched against class.weapon_types
+# (or armor_types when implemented).
+- id: short_sword
+  name: Short Sword
+  slot: weapon
+  weapon_type: sword
+  price: 50
+  range: { min: 1, max: 1 }
+  stats: { atk: 5 }
+
+- id: hand_axe
+  name: Hand Axe
+  slot: weapon
+  weapon_type: axe
+  price: 80
+  range: { min: 1, max: 1 }
+  stats: { atk: 7 }
+
+- id: short_bow
+  name: Short Bow
+  slot: weapon
+  weapon_type: bow
+  price: 120
+  range: { min: 2, max: 2 }
+  stats: { atk: 6 }
+
+- id: wooden_staff
+  name: Wooden Staff
+  slot: weapon
+  weapon_type: staff
+  price: 30
+  range: { min: 1, max: 1 }
+  stats: { atk: 2 }

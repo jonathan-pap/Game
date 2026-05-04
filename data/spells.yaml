@@ -1,0 +1,52 @@
+# Spells. levels[] lets a single spell scale: e.g. Heal 1/2/3/4.
+# range: target reachable tiles. area: AoE shape around the targeted tile.
+# target: enemy | ally | self | tile.
+- id: heal
+  name: Heal
+  school: light
+  target: ally
+  levels:
+    - { mp: 3, range: 2, area: single, heal: 20 }
+    - { mp: 5, range: 2, area: single, heal: 50 }
+    - { mp: 8, range: 2, area: single, heal: 9999 } # full heal
+    - { mp: 12, range: 2, area: cross_1, heal: 50 } # party heal
+
+- id: detox
+  name: Detox
+  school: light
+  target: ally
+  levels:
+    - { mp: 4, range: 2, area: single, cure: poison }
+
+- id: aura
+  name: Aura
+  school: light
+  target: ally
+  levels:
+    - { mp: 8, range: 0, area: cross_2, heal: 15 } # heals self+adjacent
+    - { mp: 14, range: 0, area: cross_2, heal: 35 }
+
+- id: blaze
+  name: Blaze
+  school: fire
+  target: enemy
+  levels:
+    - { mp: 4, range: 3, area: single, damage: 12 }
+    - { mp: 8, range: 3, area: single, damage: 24 }
+    - { mp: 14, range: 3, area: cross_1, damage: 18 }
+
+- id: freeze
+  name: Freeze
+  school: ice
+  target: enemy
+  levels:
+    - { mp: 5, range: 2, area: single, damage: 14 }
+    - { mp: 10, range: 2, area: single, damage: 28 }
+
+- id: bolt
+  name: Bolt
+  school: thunder
+  target: enemy
+  levels:
+    - { mp: 6, range: 4, area: line_3, damage: 16 }
+    - { mp: 12, range: 4, area: line_3, damage: 30 }

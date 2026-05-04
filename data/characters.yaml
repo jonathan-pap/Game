@@ -1,0 +1,48 @@
+# Playable + enemy unit templates.
+# stats are base values at level 1. growth rates are percentage chances per level-up.
+# side: "player" or "enemy".
+- id: max
+  name: Max
+  side: player
+  class: swordsman
+  level: 1
+  stats: { hp: 16, mp: 0, atk: 11, def: 5, agi: 9, mov: 6 }
+  growth: { hp: 70, mp: 0, atk: 55, def: 50, agi: 45 }
+  starting_equipment: [short_sword]
+
+- id: lowe
+  name: Lowe
+  side: player
+  class: priest
+  level: 1
+  stats: { hp: 12, mp: 8, atk: 6, def: 3, agi: 7, mov: 5 }
+  growth: { hp: 50, mp: 70, atk: 30, def: 35, agi: 40 }
+  starting_equipment: [wooden_staff]
+
+- id: tao
+  name: Tao
+  side: player
+  class: mage
+  level: 1
+  stats: { hp: 10, mp: 10, atk: 5, def: 2, agi: 8, mov: 5 }
+  growth: { hp: 45, mp: 75, atk: 30, def: 30, agi: 45 }
+  starting_equipment: [wooden_staff]
+
+# --- enemies ---
+- id: goblin
+  name: Goblin
+  side: enemy
+  class: warrior
+  level: 1
+  stats: { hp: 14, mp: 0, atk: 9, def: 3, agi: 6, mov: 5 }
+  growth: { hp: 50, mp: 0, atk: 40, def: 30, agi: 35 }
+  starting_equipment: [hand_axe]
+
+- id: skeleton
+  name: Skeleton
+  side: enemy
+  class: warrior
+  level: 2
+  stats: { hp: 18, mp: 0, atk: 11, def: 4, agi: 5, mov: 5 }
+  growth: { hp: 55, mp: 0, atk: 45, def: 35, agi: 30 }
+  starting_equipment: [hand_axe]

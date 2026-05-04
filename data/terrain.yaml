@@ -1,0 +1,57 @@
+# Tile types. move_cost is added to a unit's movement budget when entering.
+# defense_bonus is a flat modifier added to DEF when standing on this tile.
+# evade_bonus is % chance to dodge attacks.
+# blocks: true means impassable (walls, deep water).
+- id: plain
+  name: Plain
+  glyph: "."
+  color: "#6a8f4a"
+  move_cost: 1
+  defense_bonus: 0
+  evade_bonus: 0
+  blocks: false
+
+- id: forest
+  name: Forest
+  glyph: "F"
+  color: "#2f5a2a"
+  move_cost: 2
+  defense_bonus: 1
+  evade_bonus: 15
+  blocks: false
+
+- id: mountain
+  name: Mountain
+  glyph: "^"
+  color: "#7a6a55"
+  move_cost: 3
+  defense_bonus: 2
+  evade_bonus: 10
+  blocks: false
+
+- id: water
+  name: Water
+  glyph: "~"
+  color: "#3060a8"
+  move_cost: 99
+  defense_bonus: 0
+  evade_bonus: 0
+  blocks: true
+
+- id: road
+  name: Road
+  glyph: "="
+  color: "#a8956a"
+  move_cost: 1
+  defense_bonus: 0
+  evade_bonus: 0
+  blocks: false
+
+- id: wall
+  name: Wall
+  glyph: "#"
+  color: "#444444"
+  move_cost: 99
+  defense_bonus: 0
+  evade_bonus: 0
+  blocks: true

@@ -1,0 +1,81 @@
+# Character classes. Promotion: at level 20, base class -> promoted class.
+# learn: list of {spell_id, level} -- spell becomes available at that level.
+- id: swordsman
+  name: Swordsman
+  promotes_to: hero
+  movement: 6
+  weapon_types: [sword]
+  learn: []
+
+- id: hero
+  name: Hero
+  promotes_to: null
+  movement: 7
+  weapon_types: [sword]
+  learn: []
+
+- id: warrior
+  name: Warrior
+  promotes_to: gladiator
+  movement: 5
+  weapon_types: [axe]
+  learn: []
+
+- id: gladiator
+  name: Gladiator
+  promotes_to: null
+  movement: 6
+  weapon_types: [axe]
+  learn: []
+
+- id: archer
+  name: Archer
+  promotes_to: sniper
+  movement: 6
+  weapon_types: [bow]
+  learn: []
+
+- id: sniper
+  name: Sniper
+  promotes_to: null
+  movement: 7
+  weapon_types: [bow]
+  learn: []
+
+- id: priest
+  name: Priest
+  promotes_to: vicar
+  movement: 5
+  weapon_types: [staff]
+  learn:
+    - { spell: heal, level: 1 }
+    - { spell: detox, level: 5 }
+
+- id: vicar
+  name: Vicar
+  promotes_to: null
+  movement: 6
+  weapon_types: [staff]
+  learn:
+    - { spell: heal, level: 1 }
+    - { spell: detox, level: 5 }
+    - { spell: aura, level: 1 }
+
+- id: mage
+  name: Mage
+  promotes_to: wizard
+  movement: 5
+  weapon_types: [staff]
+  learn:
+    - { spell: blaze, level: 1 }
+    - { spell: freeze, level: 7 }
+
+- id: wizard
+  name: Wizard
+  promotes_to: null
+  movement: 6
+  weapon_types: [staff]
+  learn:
+    - { spell: blaze, level: 1 }
+    - { spell: freeze, level: 7 }
+    - { spell: bolt, level: 1 }
