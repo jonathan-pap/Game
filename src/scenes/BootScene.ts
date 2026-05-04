@@ -20,11 +20,10 @@ export class BootScene extends Phaser.Scene {
     try {
       const data: GameData = await loadAllGameData();
       this.registry.set("gameData", data);
-      status.setText("Data loaded. Starting battle...");
-      this.time.delayedCall(300, () => this.scene.start("Battle"));
+      this.scene.start("Battle");
     } catch (err) {
       console.error(err);
-      status.setText("Failed to load data. See console.");
+      status.setText(`Failed to load data: ${(err as Error).message}`);
       status.setColor("#f66");
     }
   }

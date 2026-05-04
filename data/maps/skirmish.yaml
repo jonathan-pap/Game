@@ -1,0 +1,33 @@
+# Battle map: Forest Skirmish
+# tiles[] is a list of row strings; each char is a terrain glyph from terrain.yaml.
+#   .  plain        F  forest      ^  mountain
+#   ~  water        =  road        #  wall
+# units[] reference characters.yaml templates; multiple instances of the same
+# template are allowed (auto-numbered at runtime).
+id: skirmish
+name: Forest Skirmish
+size: { cols: 16, rows: 12 }
+
+tiles:
+  - "================"
+  - "=..............="
+  - "=.....FF.......="
+  - "=....FFF.......="
+  - "=...FFF........="
+  - "=...F..........="
+  - "=......~~~.....="
+  - "=.....~~~~~....="
+  - "=......~~~.....="
+  - "=...........^^.="
+  - "=............^.="
+  - "================"
+
+units:
+  - { template: max,      at: [2, 4] }
+  - { template: lowe,     at: [2, 6] }
+  - { template: tao,      at: [2, 8] }
+  - { template: goblin,   at: [13, 4] }
+  - { template: goblin,   at: [13, 6] }
+  - { template: skeleton, at: [13, 8] }
+
+victory: rout_enemy

@@ -124,6 +124,26 @@ export const SpellSchema = z.object({
 });
 export type Spell = z.infer<typeof SpellSchema>;
 
+const CoordTupleSchema = z.tuple([z.number().int().nonnegative(), z.number().int().nonnegative()]);
+
+const MapUnitPlacementSchema = z.object({
+  template: z.string(),
+  at: CoordTupleSchema,
+});
+
+export const BattleMapSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  size: z.object({
+    cols: z.number().int().positive(),
+    rows: z.number().int().positive(),
+  }),
+  tiles: z.array(z.string()),
+  units: z.array(MapUnitPlacementSchema),
+  victory: z.enum(["rout_enemy", "defeat_boss", "survive_n_turns", "reach_tile"]),
+});
+export type BattleMap = z.infer<typeof BattleMapSchema>;
+
 export interface GameData {
   characters: Character[];
   classes: CharacterClass[];
@@ -131,4 +151,5 @@ export interface GameData {
   equipment: Equipment[];
   terrain: Terrain[];
   spells: Spell[];
+  maps: Record<string, BattleMap>;
 }
