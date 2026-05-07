@@ -1,52 +1,160 @@
-# Spells. levels[] lets a single spell scale: e.g. Heal 1/2/3/4.
-# range: target reachable tiles. area: AoE shape around the targeted tile.
-# target: enemy | ally | self | tile.
+# Shining Force 1 spell catalog. Damage values follow Shining Force Central
+# primary data; secondary RPGClassics values agree closely. Only the five
+# elemental schools (Heal, Aura, Blaze, Freeze, Bolt) reach Tier 4 in normal
+# play; status / utility spells cap at Tier 1 for the player.
+#
+# Area shapes:
+#   single   = 1 tile (just the target)
+#   cross_1  = target + 4 cardinal neighbors (5 tiles)
+#   cross_2  = diamond radius 2 (13 tiles)
+#   line_3   = 3 tiles in a line from caster
+#   all_allies = entire party regardless of position
+#
+# AoE spells in SF1 do NOT friendly-fire: offensive AoE hits enemies only,
+# support AoE heals allies only. We bake that into combat/magic.ts.
+
+# --- Light school -------------------------------------------------------
+
 - id: heal
   name: Heal
   school: light
   target: ally
   levels:
-    - { mp: 3, range: 2, area: single, heal: 20 }
-    - { mp: 5, range: 2, area: single, heal: 50 }
-    - { mp: 8, range: 2, area: single, heal: 9999 } # full heal
-    - { mp: 12, range: 2, area: cross_1, heal: 50 } # party heal
-
-- id: detox
-  name: Detox
-  school: light
-  target: ally
-  levels:
-    - { mp: 4, range: 2, area: single, cure: poison }
+    - { mp: 3, range: 1, area: single, heal: 15 }
+    - { mp: 6, range: 2, area: single, heal: 15 }
+    - { mp: 10, range: 3, area: single, heal: 30 }
+    - { mp: 20, range: 1, area: single, heal: 9999 } # full heal
 
 - id: aura
   name: Aura
   school: light
   target: ally
   levels:
-    - { mp: 8, range: 0, area: cross_2, heal: 15 } # heals self+adjacent
-    - { mp: 14, range: 0, area: cross_2, heal: 35 }
+    - { mp: 7, range: 3, area: cross_1, heal: 15 }
+    - { mp: 11, range: 3, area: cross_2, heal: 15 }
+    - { mp: 15, range: 3, area: cross_2, heal: 30 }
+    - { mp: 18, range: 0, area: all_allies, heal: 9999 }
+
+- id: detox
+  name: Detox
+  school: light
+  target: ally
+  levels:
+    - { mp: 3, range: 1, area: single, cure: poison }
+
+- id: dispel
+  name: Dispel
+  school: light
+  target: enemy
+  levels:
+    - { mp: 5, range: 2, area: single, cure: silence } # bounces magic / silences
+
+- id: egress
+  name: Egress
+  school: light
+  target: self
+  levels:
+    - { mp: 8, range: 0, area: single } # retreats party to last town
+
+- id: shield
+  name: Shield
+  school: light
+  target: ally
+  levels:
+    - { mp: 5, range: 2, area: single, cure: shield } # temp magic resist
+
+# --- Wind / Buff school -------------------------------------------------
+
+- id: boost
+  name: Boost
+  school: wind
+  target: ally
+  levels:
+    - { mp: 15, range: 3, area: single, cure: boost_atk } # +15 ATK buff
+  # Tiers 2-3 exist in ROM but not normally learnable; omit so player can't pick.
+
+- id: slow
+  name: Slow
+  school: wind
+  target: enemy
+  levels:
+    - { mp: 5, range: 2, area: single, cure: slow_def_agi } # -DEF/-AGI ~5
+    - { mp: 20, range: 2, area: cross_1, cure: slow_def_agi } # -DEF/-AGI ~10 group
+
+- id: quick
+  name: Quick
+  school: wind
+  target: ally
+  levels:
+    - { mp: 5, range: 1, area: single, cure: quick_def_agi } # +DEF/+AGI ~5
+    - { mp: 16, range: 2, area: cross_1, cure: quick_def_agi } # +DEF/+AGI ~10
+
+# --- Fire school --------------------------------------------------------
 
 - id: blaze
   name: Blaze
   school: fire
   target: enemy
   levels:
-    - { mp: 4, range: 3, area: single, damage: 12 }
-    - { mp: 8, range: 3, area: single, damage: 24 }
-    - { mp: 14, range: 3, area: cross_1, damage: 18 }
+    - { mp: 2, range: 2, area: single, damage: 8 }
+    - { mp: 5, range: 2, area: cross_1, damage: 10 }
+    - { mp: 8, range: 2, area: cross_1, damage: 15 }
+    - { mp: 8, range: 2, area: single, damage: 40 } # T4 trades AoE for raw single
+
+# --- Ice school ---------------------------------------------------------
 
 - id: freeze
   name: Freeze
   school: ice
   target: enemy
   levels:
-    - { mp: 5, range: 2, area: single, damage: 14 }
-    - { mp: 10, range: 2, area: single, damage: 28 }
+    - { mp: 3, range: 2, area: single, damage: 10 }
+    - { mp: 7, range: 2, area: cross_1, damage: 12 }
+    - { mp: 10, range: 3, area: cross_1, damage: 18 }
+    - { mp: 10, range: 4, area: single, damage: 50 } # long-range nuke
+
+# --- Thunder school -----------------------------------------------------
 
 - id: bolt
   name: Bolt
   school: thunder
   target: enemy
   levels:
-    - { mp: 6, range: 4, area: line_3, damage: 16 }
-    - { mp: 12, range: 4, area: line_3, damage: 30 }
+    - { mp: 8, range: 2, area: cross_1, damage: 14 } # T1 already AoE
+    - { mp: 15, range: 3, area: cross_1, damage: 16 }
+    - { mp: 20, range: 3, area: cross_2, damage: 25 }
+    - { mp: 20, range: 3, area: single, damage: 60 } # T4 single nuke
+
+# --- Dark school --------------------------------------------------------
+
+- id: desoul
+  name: Desoul
+  school: dark
+  target: enemy
+  levels:
+    - { mp: 8, range: 2, area: single, damage: 9999 } # instant death; may miss
+  # T2 is enemy-only (Dark Dragon), T3 cheat-only.
+
+- id: demon_breath
+  name: Demon Breath
+  school: dark
+  target: enemy
+  levels:
+    - { mp: 0, range: 2, area: cross_1, damage: 30 } # enemy-only, no MP cost
+    - { mp: 0, range: 2, area: cross_1, damage: 60 } # Dark Dragon final form
+
+# --- Status school ------------------------------------------------------
+
+- id: muddle
+  name: Muddle
+  school: status
+  target: enemy
+  levels:
+    - { mp: 6, range: 2, area: single, cure: confuse }
+
+- id: sleep
+  name: Sleep
+  school: status
+  target: enemy
+  levels:
+    - { mp: 6, range: 2, area: single, cure: sleep }

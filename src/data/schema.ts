@@ -17,6 +17,17 @@ const GrowthSchema = z.object({
   agi: z.number().min(0).max(100),
 });
 
+const LearnEntrySchema = z.object({
+  spell: z.string(),
+  level: z.number().int().positive(),
+  // Which tier (entry in spell.levels) the unit knows this spell at.
+  // 1-indexed; defaults to 1 (the first/weakest tier).
+  tier: z.number().int().positive().default(1),
+});
+
+// SF1's spell-learning is per-character (Lowe and Khris are both Healers but
+// learn different spell rotations). Each character can have its own learn[].
+// A class.learn[] is still supported as a default/fallback for genericness.
 export const CharacterSchema = z.object({
   id: z.string(),
   name: z.string(),
@@ -26,16 +37,9 @@ export const CharacterSchema = z.object({
   stats: StatsSchema,
   growth: GrowthSchema,
   starting_equipment: z.array(z.string()).default([]),
+  learn: z.array(LearnEntrySchema).default([]),
 });
 export type Character = z.infer<typeof CharacterSchema>;
-
-const LearnEntrySchema = z.object({
-  spell: z.string(),
-  level: z.number().int().positive(),
-  // Which tier (entry in spell.levels) the unit knows this spell at.
-  // 1-indexed; defaults to 1 (the first/weakest tier).
-  tier: z.number().int().positive().default(1),
-});
 
 export const ClassSchema = z.object({
   id: z.string(),
@@ -43,6 +47,9 @@ export const ClassSchema = z.object({
   promotes_to: z.string().nullable(),
   movement: z.number().int().positive(),
   weapon_types: z.array(z.string()),
+  // Default character level required to promote (SF1 = 10).
+  promotion_level: z.number().int().positive().default(10),
+  // Class-default spell-learn list. Per-character entries override these.
   learn: z.array(LearnEntrySchema).default([]),
 });
 export type CharacterClass = z.infer<typeof ClassSchema>;
@@ -54,6 +61,10 @@ const ItemEffectSchema = z.discriminatedUnion("kind", [
     target: z.enum(["self", "ally"]),
   }),
   z.object({
+    kind: z.literal("heal_party_hp"),
+    amount: z.number().int().positive(),
+  }),
+  z.object({
     kind: z.literal("cure_status"),
     status: z.string(),
     target: z.enum(["self", "ally"]),
@@ -61,6 +72,18 @@ const ItemEffectSchema = z.discriminatedUnion("kind", [
   z.object({
     kind: z.literal("warp_to_town"),
     target: z.literal("self"),
+  }),
+  // Permanent stat-up consumable (Bread of Life, Power Potion, etc.)
+  z.object({
+    kind: z.literal("permanent_stat_up"),
+    stat: z.enum(["hp", "mp", "atk", "def", "agi", "mov"]),
+    amount: z.number().int().positive(),
+    target: z.enum(["self", "ally"]),
+  }),
+  // Plot-significant key items consumed in events.
+  z.object({
+    kind: z.literal("plot_event"),
+    description: z.string(),
   }),
 ]);
 
@@ -80,9 +103,12 @@ const RangeSchema = z.object({
 
 const EquipmentStatsSchema = z
   .object({
+    hp: z.number().int().optional(),
+    mp: z.number().int().optional(),
     atk: z.number().int().optional(),
     def: z.number().int().optional(),
     agi: z.number().int().optional(),
+    mov: z.number().int().optional(),
   })
   .partial();
 
@@ -91,9 +117,15 @@ export const EquipmentSchema = z.object({
   name: z.string(),
   slot: z.enum(["weapon", "armor", "accessory"]),
   weapon_type: z.string().optional(),
-  price: z.number().int().nonnegative(),
+  price: z.number().int().nonnegative().default(0),
   range: RangeSchema.optional(),
   stats: EquipmentStatsSchema.default({}),
+  // Class ids that may equip this. Empty = unrestricted.
+  classes_allowed: z.array(z.string()).default([]),
+  // Cursed gear cannot be unequipped without a Cancel/de-curse NPC.
+  cursed: z.boolean().default(false),
+  // Some items grant a built-in spell cast (Power Ring -> Boost, etc.).
+  cast_spell: z.string().optional(),
 });
 export type Equipment = z.infer<typeof EquipmentSchema>;
 
@@ -147,8 +179,19 @@ export const BattleMapSchema = z.object({
 });
 export type BattleMap = z.infer<typeof BattleMapSchema>;
 
+// Enemies live in a separate YAML file but use the same shape as Character.
+// They're merged into the unified `characters` lookup at load time so map
+// unit-placement templates can reference players or enemies by id uniformly.
+export const EnemySchema = CharacterSchema.extend({
+  side: z.literal("enemy").default("enemy"),
+  // Which SF1 chapter this enemy first appears in (for documentation /
+  // future encounter generation).
+  chapter: z.number().int().positive().optional(),
+});
+export type Enemy = z.infer<typeof EnemySchema>;
+
 export interface GameData {
-  characters: Character[];
+  characters: Character[]; // includes enemies after loader merges
   classes: CharacterClass[];
   items: Item[];
   equipment: Equipment[];

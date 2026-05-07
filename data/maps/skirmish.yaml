@@ -23,11 +23,12 @@ tiles:
   - "================"
 
 units:
-  - { template: max,      at: [2, 4] }
-  - { template: lowe,     at: [2, 6] }
-  - { template: tao,      at: [2, 8] }
-  - { template: goblin,   at: [13, 4] }
-  - { template: goblin,   at: [13, 6] }
-  - { template: skeleton, at: [13, 8] }
+  # Ch1-equivalent skirmish: Max + Lowe + Tao vs 2 goblins + 1 dark dwarf.
+  - { template: max,        at: [2, 4] }
+  - { template: lowe,       at: [2, 6] }
+  - { template: tao,        at: [2, 8] }
+  - { template: goblin,     at: [13, 4] }
+  - { template: goblin,     at: [13, 6] }
+  - { template: dark_dwarf, at: [13, 8] }
 
 victory: rout_enemy

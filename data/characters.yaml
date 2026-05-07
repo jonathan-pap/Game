@@ -1,48 +1,389 @@
-# Playable + enemy unit templates.
-# stats are base values at level 1. growth rates are percentage chances per level-up.
-# side: "player" or "enemy".
+# Shining Force 1 playable roster (30 characters). Base stats are
+# Lv-at-recruit values from Shining Force Central per-character pages.
+# growth.* are placeholder estimates (SF1 uses non-linear per-char curves
+# we did not extract numerically); adjust later when leveling matters.
+# learn[] is the SF1 per-character spell schedule (caster characters only).
+#
+# Caveats flagged by source research:
+#   - Vankar HP=32 looks like an SFC page error; using a more reasonable 16
+#   - Hanzou's SFC stats are a copy-paste of Lowe; using community estimates
+#   - Lyle's class is "Assault Knight" per SFC (centaur archer)
+
+# === Chapter 1 recruits ===
+
 - id: max
   name: Max
   side: player
   class: swordsman
   level: 1
-  stats: { hp: 16, mp: 0, atk: 11, def: 5, agi: 9, mov: 6 }
-  growth: { hp: 70, mp: 0, atk: 55, def: 50, agi: 45 }
-  starting_equipment: [short_sword]
+  stats: { hp: 12, mp: 8, atk: 14, def: 4, agi: 4, mov: 6 }
+  growth: { hp: 65, mp: 0, atk: 60, def: 50, agi: 45 }
+  starting_equipment: [middle_sword]
+  learn:
+    - { spell: egress, level: 1, tier: 1 }
 
 - id: lowe
   name: Lowe
   side: player
-  class: priest
+  class: healer
   level: 1
-  stats: { hp: 12, mp: 8, atk: 6, def: 3, agi: 7, mov: 5 }
+  stats: { hp: 11, mp: 10, atk: 10, def: 5, agi: 5, mov: 5 }
   growth: { hp: 50, mp: 70, atk: 30, def: 35, agi: 40 }
   starting_equipment: [wooden_staff]
+  learn:
+    - { spell: heal, level: 1, tier: 1 }
+    - { spell: detox, level: 4, tier: 1 }
+    - { spell: heal, level: 7, tier: 2 }
+    - { spell: slow, level: 10, tier: 1 }
+    - { spell: quick, level: 13, tier: 1 }
+    - { spell: heal, level: 16, tier: 3 }
+    - { spell: heal, level: 22, tier: 4 }
+
+- id: ken
+  name: Ken
+  side: player
+  class: knight
+  level: 1
+  stats: { hp: 8, mp: 0, atk: 13, def: 6, agi: 5, mov: 7 }
+  growth: { hp: 60, mp: 0, atk: 55, def: 55, agi: 45 }
+  starting_equipment: [spear]
+  learn: []
+
+- id: luke
+  name: Luke
+  side: player
+  class: warrior
+  level: 1
+  stats: { hp: 9, mp: 0, atk: 14, def: 7, agi: 4, mov: 6 }
+  growth: { hp: 65, mp: 0, atk: 55, def: 60, agi: 35 }
+  starting_equipment: [short_sword]
+  learn: []
 
 - id: tao
   name: Tao
   side: player
   class: mage
   level: 1
-  stats: { hp: 10, mp: 10, atk: 5, def: 2, agi: 8, mov: 5 }
-  growth: { hp: 45, mp: 75, atk: 30, def: 30, agi: 45 }
+  stats: { hp: 11, mp: 7, atk: 8, def: 4, agi: 8, mov: 5 }
+  growth: { hp: 45, mp: 75, atk: 30, def: 30, agi: 50 }
   starting_equipment: [wooden_staff]
+  learn:
+    - { spell: blaze, level: 1, tier: 1 }
+    - { spell: blaze, level: 4, tier: 2 }
+    - { spell: sleep, level: 8, tier: 1 }
+    - { spell: blaze, level: 12, tier: 3 }
+    - { spell: dispel, level: 16, tier: 1 }
+    - { spell: blaze, level: 20, tier: 4 }
+    - { spell: boost, level: 27, tier: 1 }
 
-# --- enemies ---
-- id: goblin
-  name: Goblin
-  side: enemy
-  class: warrior
+- id: hans
+  name: Hans
+  side: player
+  class: archer
   level: 1
-  stats: { hp: 14, mp: 0, atk: 9, def: 3, agi: 6, mov: 5 }
-  growth: { hp: 50, mp: 0, atk: 40, def: 30, agi: 35 }
-  starting_equipment: [hand_axe]
+  stats: { hp: 12, mp: 0, atk: 14, def: 5, agi: 6, mov: 5 }
+  growth: { hp: 55, mp: 0, atk: 50, def: 35, agi: 50 }
+  starting_equipment: [wooden_arrow]
+  learn: []
 
-- id: skeleton
-  name: Skeleton
-  side: enemy
+# === Chapter 2 recruits ===
+
+- id: khris
+  name: Khris
+  side: player
+  class: healer
+  level: 2
+  stats: { hp: 11, mp: 10, atk: 10, def: 5, agi: 4, mov: 5 }
+  growth: { hp: 50, mp: 70, atk: 30, def: 40, agi: 40 }
+  starting_equipment: [wooden_staff]
+  learn:
+    - { spell: heal, level: 1, tier: 1 }
+    - { spell: heal, level: 5, tier: 2 }
+    - { spell: slow, level: 8, tier: 1 }
+    - { spell: quick, level: 12, tier: 1 }
+    - { spell: heal, level: 16, tier: 3 }
+    - { spell: aura, level: 20, tier: 1 }
+    - { spell: heal, level: 21, tier: 4 }
+    - { spell: aura, level: 28, tier: 2 }
+
+- id: gort
+  name: Gort
+  side: player
   class: warrior
   level: 2
-  stats: { hp: 18, mp: 0, atk: 11, def: 4, agi: 5, mov: 5 }
-  growth: { hp: 55, mp: 0, atk: 45, def: 35, agi: 30 }
+  stats: { hp: 12, mp: 0, atk: 15, def: 8, agi: 4, mov: 6 }
+  growth: { hp: 70, mp: 0, atk: 60, def: 65, agi: 30 }
   starting_equipment: [hand_axe]
+  learn: []
+
+- id: mae
+  name: Mae
+  side: player
+  class: knight
+  level: 2
+  stats: { hp: 12, mp: 0, atk: 14, def: 7, agi: 7, mov: 7 }
+  growth: { hp: 60, mp: 0, atk: 55, def: 55, agi: 50 }
+  starting_equipment: [bronze_lance]
+  learn: []
+
+- id: anri
+  name: Anri
+  side: player
+  class: mage
+  level: 3
+  stats: { hp: 10, mp: 13, atk: 17, def: 4, agi: 8, mov: 5 }
+  growth: { hp: 45, mp: 75, atk: 35, def: 30, agi: 50 }
+  starting_equipment: [wooden_staff]
+  learn:
+    - { spell: blaze, level: 1, tier: 1 }
+    - { spell: freeze, level: 5, tier: 1 }
+    - { spell: blaze, level: 8, tier: 2 }
+    - { spell: muddle, level: 10, tier: 1 }
+    - { spell: freeze, level: 13, tier: 2 }
+    - { spell: freeze, level: 16, tier: 3 }
+    - { spell: bolt, level: 19, tier: 1 }
+    - { spell: freeze, level: 23, tier: 4 }
+    - { spell: bolt, level: 29, tier: 2 }
+
+- id: gong
+  name: Gong
+  side: player
+  class: monk
+  level: 1
+  stats: { hp: 11, mp: 8, atk: 11, def: 4, agi: 6, mov: 5 }
+  growth: { hp: 55, mp: 60, atk: 45, def: 40, agi: 45 }
+  starting_equipment: []
+  learn:
+    - { spell: heal, level: 1, tier: 1 }
+    - { spell: heal, level: 8, tier: 2 }
+    - { spell: heal, level: 16, tier: 3 }
+    - { spell: heal, level: 24, tier: 4 }
+    - { spell: aura, level: 30, tier: 1 }
+
+- id: arthur
+  name: Arthur
+  side: player
+  class: knight
+  level: 4
+  stats: { hp: 10, mp: 0, atk: 15, def: 6, agi: 7, mov: 7 }
+  growth: { hp: 60, mp: 0, atk: 55, def: 55, agi: 45 }
+  starting_equipment: [bronze_lance]
+  learn:
+    # Arthur is unique among knights -- learns minor magic late.
+    - { spell: blaze, level: 15, tier: 1 }
+    - { spell: freeze, level: 20, tier: 1 }
+    - { spell: bolt, level: 25, tier: 1 }
+
+# === Chapter 3 recruits ===
+
+- id: balbaroy
+  name: Balbaroy
+  side: player
+  class: birdman
+  level: 5
+  stats: { hp: 15, mp: 0, atk: 17, def: 12, agi: 11, mov: 7 }
+  growth: { hp: 55, mp: 0, atk: 55, def: 50, agi: 55 }
+  starting_equipment: [middle_sword]
+  learn: []
+
+- id: amon
+  name: Amon
+  side: player
+  class: birdman
+  level: 5
+  stats: { hp: 16, mp: 0, atk: 16, def: 7, agi: 10, mov: 7 }
+  growth: { hp: 55, mp: 0, atk: 55, def: 45, agi: 55 }
+  starting_equipment: [middle_sword]
+  learn: []
+
+- id: diane
+  name: Diane
+  side: player
+  class: archer
+  level: 6
+  stats: { hp: 15, mp: 0, atk: 22, def: 7, agi: 12, mov: 5 }
+  growth: { hp: 55, mp: 0, atk: 60, def: 40, agi: 60 }
+  starting_equipment: [steel_arrow]
+  learn: []
+
+- id: zylo
+  name: Zylo
+  side: player
+  class: werewolf
+  level: 9
+  stats: { hp: 23, mp: 0, atk: 27, def: 17, agi: 12, mov: 7 }
+  growth: { hp: 70, mp: 0, atk: 65, def: 55, agi: 55 }
+  starting_equipment: []
+  learn: []
+
+- id: pelle
+  name: Pelle
+  side: player
+  class: knight
+  level: 8
+  stats: { hp: 19, mp: 0, atk: 24, def: 20, agi: 15, mov: 7 }
+  growth: { hp: 60, mp: 0, atk: 55, def: 60, agi: 50 }
+  starting_equipment: [bronze_lance]
+  learn: []
+
+# === Chapter 4 recruits ===
+
+- id: kokichi
+  name: Kokichi
+  side: player
+  class: wing_knight
+  level: 7
+  stats: { hp: 14, mp: 0, atk: 21, def: 10, agi: 12, mov: 6 }
+  growth: { hp: 55, mp: 0, atk: 55, def: 45, agi: 55 }
+  starting_equipment: [bronze_lance]
+  learn: []
+
+- id: jogurt
+  name: Jogurt
+  side: player
+  class: yogurt
+  level: 1
+  stats: { hp: 1, mp: 0, atk: 1, def: 1, agi: 1, mov: 7 }
+  growth: { hp: 0, mp: 0, atk: 0, def: 0, agi: 0 }
+  starting_equipment: []
+  learn: []
+
+- id: vankar
+  name: Vankar
+  side: player
+  class: knight
+  level: 8
+  # SFC lists HP 32 which appears to be a page error; using 16 (community).
+  stats: { hp: 16, mp: 0, atk: 20, def: 18, agi: 11, mov: 7 } # verify HP
+  growth: { hp: 60, mp: 0, atk: 55, def: 60, agi: 45 }
+  starting_equipment: [chrome_lance]
+  learn: []
+
+- id: earnest
+  name: Earnest
+  side: player
+  class: knight
+  level: 8
+  stats: { hp: 19, mp: 0, atk: 23, def: 18, agi: 12, mov: 7 }
+  growth: { hp: 60, mp: 0, atk: 55, def: 60, agi: 50 }
+  starting_equipment: [bronze_lance]
+  learn: []
+
+- id: guntz
+  name: Guntz
+  side: player
+  class: steam_knight
+  level: 8
+  stats: { hp: 14, mp: 0, atk: 24, def: 16, agi: 13, mov: 4 }
+  growth: { hp: 60, mp: 0, atk: 60, def: 60, agi: 45 }
+  starting_equipment: [bronze_lance]
+  learn: []
+
+- id: domingo
+  name: Domingo
+  side: player
+  class: magic_creature
+  level: 1
+  stats: { hp: 24, mp: 15, atk: 10, def: 16, agi: 13, mov: 4 }
+  growth: { hp: 65, mp: 70, atk: 40, def: 60, agi: 50 }
+  starting_equipment: []
+  learn:
+    - { spell: freeze, level: 1, tier: 1 }
+    - { spell: muddle, level: 1, tier: 1 }
+    - { spell: desoul, level: 17, tier: 1 }
+    - { spell: boost, level: 20, tier: 1 }
+
+# === Chapter 5 recruits ===
+
+- id: lyle
+  name: Lyle
+  side: player
+  class: assault_knight
+  level: 8
+  stats: { hp: 14, mp: 0, atk: 30, def: 9, agi: 8, mov: 7 }
+  growth: { hp: 55, mp: 0, atk: 55, def: 45, agi: 50 }
+  starting_equipment: [elven_arrow]
+  learn: []
+
+- id: bleu
+  name: Bleu
+  side: player
+  class: dragon
+  level: 9
+  stats: { hp: 19, mp: 0, atk: 28, def: 17, agi: 10, mov: 5 }
+  growth: { hp: 75, mp: 0, atk: 70, def: 55, agi: 55 }
+  starting_equipment: []
+  learn: []
+
+# === Chapter 7 recruits ===
+
+- id: musashi
+  name: Musashi
+  side: player
+  class: samurai
+  level: 10
+  stats: { hp: 28, mp: 0, atk: 48, def: 18, agi: 16, mov: 5 }
+  growth: { hp: 65, mp: 0, atk: 60, def: 50, agi: 50 }
+  starting_equipment: [katana]
+  learn: []
+
+- id: adam
+  name: Adam
+  side: player
+  class: robot
+  level: 10
+  stats: { hp: 35, mp: 0, atk: 23, def: 24, agi: 12, mov: 4 }
+  growth: { hp: 70, mp: 0, atk: 50, def: 65, agi: 35 }
+  starting_equipment: []
+  learn: []
+
+- id: torasu
+  name: Torasu
+  side: player
+  class: healer
+  level: 16
+  stats: { hp: 23, mp: 25, atk: 24, def: 12, agi: 15, mov: 5 }
+  growth: { hp: 50, mp: 70, atk: 30, def: 35, agi: 40 }
+  starting_equipment: [power_staff]
+  learn:
+    - { spell: heal, level: 1, tier: 1 }
+    - { spell: detox, level: 4, tier: 1 }
+    - { spell: shield, level: 12, tier: 1 }
+    - { spell: aura, level: 16, tier: 1 }
+    - { spell: aura, level: 20, tier: 2 }
+    - { spell: aura, level: 24, tier: 3 }
+    - { spell: aura, level: 28, tier: 4 }
+
+- id: alef
+  name: Alef
+  side: player
+  class: mage
+  level: 15
+  stats: { hp: 16, mp: 29, atk: 24, def: 11, agi: 19, mov: 5 }
+  growth: { hp: 45, mp: 75, atk: 35, def: 30, agi: 50 }
+  starting_equipment: [power_staff]
+  learn:
+    - { spell: blaze, level: 1, tier: 1 }
+    - { spell: freeze, level: 3, tier: 1 }
+    - { spell: blaze, level: 6, tier: 2 }
+    - { spell: freeze, level: 9, tier: 2 }
+    - { spell: bolt, level: 12, tier: 1 }
+    - { spell: bolt, level: 17, tier: 2 }
+    - { spell: bolt, level: 22, tier: 3 }
+    - { spell: desoul, level: 26, tier: 1 }
+    - { spell: bolt, level: 30, tier: 4 }
+
+# === Chapter 8 recruits ===
+
+- id: hanzou
+  name: Hanzou
+  side: player
+  class: ninja
+  level: 10
+  # SFC page repeats Lowe's stats for Hanzou (likely page error).
+  # Using community estimates from forum analysis.
+  stats: { hp: 28, mp: 10, atk: 32, def: 15, agi: 18, mov: 5 } # verify
+  growth: { hp: 60, mp: 50, atk: 60, def: 50, agi: 60 }
+  starting_equipment: [doom_blade]
+  learn:
+    - { spell: desoul, level: 17, tier: 1 } # Hanzou's signature

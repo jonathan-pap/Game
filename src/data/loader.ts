@@ -5,6 +5,7 @@ import {
   BattleMapSchema,
   CharacterSchema,
   ClassSchema,
+  EnemySchema,
   EquipmentSchema,
   GameData,
   ItemSchema,
@@ -14,6 +15,7 @@ import {
 
 // Vite ?raw imports inline the file as a string at build time.
 import charactersYaml from "../../data/characters.yaml?raw";
+import enemiesYaml from "../../data/enemies.yaml?raw";
 import classesYaml from "../../data/classes.yaml?raw";
 import itemsYaml from "../../data/items.yaml?raw";
 import equipmentYaml from "../../data/equipment.yaml?raw";
@@ -79,8 +81,21 @@ function parseMaps(): Record<string, BattleMap> {
 }
 
 export async function loadAllGameData(): Promise<GameData> {
+  // Players + enemies share the Character shape; merge them under a single
+  // lookup so map placements can reference either by id.
+  const players = parseList(CharacterSchema, charactersYaml, "characters.yaml");
+  const enemies = parseList(EnemySchema, enemiesYaml, "enemies.yaml");
+  const seen = new Set<string>();
+  const characters = [...players, ...enemies].filter((u) => {
+    if (seen.has(u.id)) {
+      console.warn(`Duplicate character/enemy id ignored: ${u.id}`);
+      return false;
+    }
+    seen.add(u.id);
+    return true;
+  });
   return {
-    characters: parseList(CharacterSchema, charactersYaml, "characters.yaml"),
+    characters,
     classes: parseList(ClassSchema, classesYaml, "classes.yaml"),
     items: parseList(ItemSchema, itemsYaml, "items.yaml"),
     equipment: parseList(EquipmentSchema, equipmentYaml, "equipment.yaml"),

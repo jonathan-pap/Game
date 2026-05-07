@@ -1,33 +1,384 @@
-# Weapons and armor. classes_allowed is matched against class.weapon_types
-# (or armor_types when implemented).
+# Shining Force 1 weapon and accessory catalog. Prices in gold (G).
+# `event` price means treasure-only; we mark these as price 0 + flagged
+# in code via the absence of a buyable shop. ATK is the bonus added to
+# the wielder's base ATK.
+
+# === Swords (Max, ninja, samurai, sky warriors, warriors)===
+
 - id: short_sword
   name: Short Sword
   slot: weapon
   weapon_type: sword
-  price: 50
+  price: 100
   range: { min: 1, max: 1 }
   stats: { atk: 5 }
+  classes_allowed: [swordsman, hero, warrior, gladiator, birdman, sky_warrior]
+
+- id: middle_sword
+  name: Middle Sword
+  slot: weapon
+  weapon_type: sword
+  price: 250
+  range: { min: 1, max: 1 }
+  stats: { atk: 8 }
+  classes_allowed: [swordsman, hero, warrior, gladiator, birdman, sky_warrior]
+
+- id: long_sword
+  name: Long Sword
+  slot: weapon
+  weapon_type: sword
+  price: 750
+  range: { min: 1, max: 1 }
+  stats: { atk: 12 }
+  classes_allowed: [swordsman, hero, birdman, sky_warrior]
+
+- id: steel_sword
+  name: Steel Sword
+  slot: weapon
+  weapon_type: sword
+  price: 2500
+  range: { min: 1, max: 1 }
+  stats: { atk: 18 }
+  classes_allowed: [hero, ninja, great_ninja, sky_warrior, samurai, great_samurai]
+
+- id: broad_sword
+  name: Broad Sword
+  slot: weapon
+  weapon_type: sword
+  price: 4800
+  range: { min: 1, max: 1 }
+  stats: { atk: 20 }
+  classes_allowed: [hero, ninja, great_ninja, sky_warrior, samurai, great_samurai]
+
+- id: doom_blade
+  name: Doom Blade
+  slot: weapon
+  weapon_type: sword
+  price: 0
+  range: { min: 1, max: 1 }
+  stats: { atk: 25 }
+  classes_allowed: [hero, ninja, great_ninja, sky_warrior, samurai, great_samurai]
+  cursed: true
+
+- id: katana
+  name: Katana
+  slot: weapon
+  weapon_type: sword
+  price: 0
+  range: { min: 1, max: 1 }
+  stats: { atk: 30 }
+  classes_allowed: [hero, ninja, great_ninja, sky_warrior, samurai, great_samurai]
+
+- id: sword_of_light
+  name: Sword of Light
+  slot: weapon
+  weapon_type: sword
+  price: 0
+  range: { min: 1, max: 1 }
+  stats: { atk: 36 }
+  classes_allowed: [hero]
+
+- id: sword_of_darkness
+  name: Sword of Darkness
+  slot: weapon
+  weapon_type: sword
+  price: 0
+  range: { min: 1, max: 1 }
+  stats: { atk: 40 }
+  classes_allowed: [hero, sky_warrior]
+  cursed: true
+
+- id: chaos_breaker
+  name: Chaos Breaker
+  slot: weapon
+  weapon_type: sword
+  price: 0
+  range: { min: 1, max: 1 }
+  stats: { atk: 40 }
+  classes_allowed: [hero]
+
+# === Axes (Luke, Gort path) ===
 
 - id: hand_axe
   name: Hand Axe
   slot: weapon
   weapon_type: axe
-  price: 80
+  price: 200
   range: { min: 1, max: 1 }
   stats: { atk: 7 }
+  classes_allowed: [warrior, gladiator]
 
-- id: short_bow
-  name: Short Bow
+- id: middle_axe
+  name: Middle Axe
+  slot: weapon
+  weapon_type: axe
+  price: 600
+  range: { min: 1, max: 1 }
+  stats: { atk: 11 }
+  classes_allowed: [warrior, gladiator]
+
+- id: battle_axe
+  name: Battle Axe
+  slot: weapon
+  weapon_type: axe
+  price: 2600
+  range: { min: 1, max: 1 }
+  stats: { atk: 16 }
+  classes_allowed: [warrior, gladiator]
+
+- id: heat_axe
+  name: Heat Axe
+  slot: weapon
+  weapon_type: axe
+  price: 0
+  range: { min: 1, max: 1 }
+  stats: { atk: 22 }
+  classes_allowed: [gladiator]
+  cast_spell: blaze # casts Blaze 2 on use
+
+- id: great_axe
+  name: Great Axe
+  slot: weapon
+  weapon_type: axe
+  price: 10000
+  range: { min: 1, max: 1 }
+  stats: { atk: 26 }
+  classes_allowed: [gladiator]
+
+- id: atlas
+  name: Atlas
+  slot: weapon
+  weapon_type: axe
+  price: 0
+  range: { min: 1, max: 1 }
+  stats: { atk: 33 }
+  classes_allowed: [gladiator]
+
+# === Spears / Lances (knights, wing knights, steam knights) ===
+
+- id: spear
+  name: Spear
+  slot: weapon
+  weapon_type: spear
+  price: 150
+  range: { min: 1, max: 2 }
+  stats: { atk: 8 }
+  classes_allowed: [knight, paladin, wing_knight, sky_lord, steam_knight, steam_baron]
+
+- id: bronze_lance
+  name: Bronze Lance
+  slot: weapon
+  weapon_type: lance
+  price: 300
+  range: { min: 1, max: 1 }
+  stats: { atk: 9 }
+  classes_allowed: [knight, paladin, wing_knight, sky_lord, steam_knight, steam_baron]
+
+- id: power_spear
+  name: Power Spear
+  slot: weapon
+  weapon_type: spear
+  price: 900
+  range: { min: 1, max: 2 }
+  stats: { atk: 15 }
+  classes_allowed: [knight, paladin, wing_knight, sky_lord, steam_knight, steam_baron]
+
+- id: steel_lance
+  name: Steel Lance
+  slot: weapon
+  weapon_type: lance
+  price: 3000
+  range: { min: 1, max: 1 }
+  stats: { atk: 18 }
+  classes_allowed: [paladin, sky_lord, steam_baron]
+
+- id: chrome_lance
+  name: Chrome Lance
+  slot: weapon
+  weapon_type: lance
+  price: 4500
+  range: { min: 1, max: 1 }
+  stats: { atk: 22 }
+  classes_allowed: [knight, paladin, sky_lord, steam_baron]
+
+- id: halberd
+  name: Halberd
+  slot: weapon
+  weapon_type: lance
+  price: 0
+  range: { min: 1, max: 1 }
+  stats: { atk: 25 }
+  classes_allowed: [paladin, sky_lord, steam_baron]
+
+- id: devil_lance
+  name: Devil Lance
+  slot: weapon
+  weapon_type: lance
+  price: 0
+  range: { min: 1, max: 1 }
+  stats: { atk: 35 }
+  classes_allowed: [paladin, sky_lord, steam_baron]
+  cursed: true
+
+- id: valkyrie
+  name: Valkyrie
+  slot: weapon
+  weapon_type: lance
+  price: 0
+  range: { min: 1, max: 1 }
+  stats: { atk: 35 }
+  classes_allowed: [paladin, sky_lord, steam_baron]
+
+# === Bows / Arrows (archers, Lyle, late steam knight) ===
+
+- id: wooden_arrow
+  name: Wooden Arrow
   slot: weapon
   weapon_type: bow
-  price: 120
+  price: 320
   range: { min: 2, max: 2 }
-  stats: { atk: 6 }
+  stats: { atk: 8 }
+  classes_allowed: [archer, bowmaster, assault_knight, strike_knight]
+
+- id: steel_arrow
+  name: Steel Arrow
+  slot: weapon
+  weapon_type: bow
+  price: 1200
+  range: { min: 2, max: 2 }
+  stats: { atk: 13 }
+  classes_allowed: [archer, bowmaster, assault_knight, strike_knight]
+
+- id: elven_arrow
+  name: Elven Arrow
+  slot: weapon
+  weapon_type: bow
+  price: 2300
+  range: { min: 2, max: 3 }
+  stats: { atk: 18 }
+  classes_allowed: [bowmaster, assault_knight, strike_knight]
+
+- id: assault_shell
+  name: Assault Shell
+  slot: weapon
+  weapon_type: bow
+  price: 4500
+  range: { min: 2, max: 3 }
+  stats: { atk: 27 }
+  classes_allowed: [steam_baron, bowmaster]
+
+- id: buster_shot
+  name: Buster Shot
+  slot: weapon
+  weapon_type: bow
+  price: 12400
+  range: { min: 2, max: 3 }
+  stats: { atk: 35 }
+  classes_allowed: [steam_baron, bowmaster]
+
+# === Staves / Rods (healers + mages) ===
 
 - id: wooden_staff
   name: Wooden Staff
   slot: weapon
   weapon_type: staff
-  price: 30
+  price: 80
   range: { min: 1, max: 1 }
-  stats: { atk: 2 }
+  stats: { atk: 4 }
+  classes_allowed: [healer, vicar, mage, wizard]
+
+- id: power_staff
+  name: Power Staff
+  slot: weapon
+  weapon_type: staff
+  price: 500
+  range: { min: 1, max: 1 }
+  stats: { atk: 12 }
+  classes_allowed: [healer, vicar, mage, wizard]
+
+- id: guardian_staff
+  name: Guardian Staff
+  slot: weapon
+  weapon_type: staff
+  price: 3200
+  range: { min: 1, max: 1 }
+  stats: { atk: 18 }
+  classes_allowed: [vicar, wizard]
+
+- id: holy_staff
+  name: Holy Staff
+  slot: weapon
+  weapon_type: staff
+  price: 8000
+  range: { min: 1, max: 1 }
+  stats: { atk: 26 }
+  classes_allowed: [vicar]
+
+- id: demon_rod
+  name: Demon Rod
+  slot: weapon
+  weapon_type: rod
+  price: 0
+  range: { min: 1, max: 1 }
+  stats: { atk: 35 }
+  classes_allowed: [wizard]
+  cursed: true
+  cast_spell: bolt
+
+# === Rings / Accessories (universal slot, one ring per unit) ===
+
+- id: power_ring
+  name: Power Ring
+  slot: accessory
+  price: 0
+  stats: { atk: 4 }
+  cast_spell: boost
+
+- id: shield_ring
+  name: Shield Ring
+  slot: accessory
+  price: 0
+  stats: { def: 4 }
+
+- id: speed_ring
+  name: Speed Ring
+  slot: accessory
+  price: 0
+  stats: { agi: 4 }
+  cast_spell: egress
+
+- id: mobility_ring
+  name: Mobility Ring
+  slot: accessory
+  price: 0
+  stats: { mov: 2 }
+
+- id: white_ring
+  name: White Ring
+  slot: accessory
+  price: 0
+  stats: { def: 6 }
+  classes_allowed: [hero, vicar]
+  cast_spell: aura
+
+- id: black_ring
+  name: Black Ring
+  slot: accessory
+  price: 0
+  stats: { atk: 6 }
+  cursed: true
+  cast_spell: blaze
+
+- id: evil_ring
+  name: Evil Ring
+  slot: accessory
+  price: 0
+  stats: { atk: 8 }
+  cursed: true
+  cast_spell: bolt
+
+- id: jogurt_ring
+  name: Jogurt Ring
+  slot: accessory
+  price: 0
+  stats: {}

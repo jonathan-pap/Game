@@ -1,15 +1,25 @@
-# Consumables and key items. effect describes runtime behavior.
+# Shining Force 1 consumables and key items. SF1 has no MP-restore item:
+# casters refresh MP only by visiting a town/HQ priest.
+
+# === Healing items (shop or treasure) ===
+
 - id: medical_herb
   name: Medical Herb
   type: consumable
   price: 10
-  effect: { kind: heal_hp, amount: 20, target: ally }
+  effect: { kind: heal_hp, amount: 10, target: ally }
 
 - id: healing_seed
   name: Healing Seed
   type: consumable
-  price: 80
-  effect: { kind: heal_hp, amount: 9999, target: ally } # full heal
+  price: 200
+  effect: { kind: heal_hp, amount: 20, target: ally }
+
+- id: healing_drop
+  name: Healing Drop
+  type: consumable
+  price: 300
+  effect: { kind: heal_hp, amount: 30, target: ally }
 
 - id: antidote
   name: Antidote
@@ -22,3 +32,73 @@
   type: consumable
   price: 40
   effect: { kind: warp_to_town, target: self }
+
+- id: shower_of_cure
+  name: Shower of Cure
+  type: consumable
+  price: 0
+  effect: { kind: heal_party_hp, amount: 40 }
+
+# === Permanent stat-up items (treasure-only) ===
+
+- id: bread_of_life
+  name: Bread of Life
+  type: consumable
+  price: 0
+  effect: { kind: permanent_stat_up, stat: hp, amount: 5, target: ally }
+
+- id: power_potion
+  name: Power Potion
+  type: consumable
+  price: 0
+  effect: { kind: permanent_stat_up, stat: atk, amount: 3, target: ally }
+
+- id: defense_potion
+  name: Defense Potion
+  type: consumable
+  price: 0
+  effect: { kind: permanent_stat_up, stat: def, amount: 3, target: ally }
+
+- id: legs_of_haste
+  name: Legs of Haste
+  type: consumable
+  price: 0
+  effect: { kind: permanent_stat_up, stat: agi, amount: 3, target: ally }
+
+- id: turbo_pepper
+  name: Turbo Pepper
+  type: consumable
+  price: 0
+  effect: { kind: permanent_stat_up, stat: mov, amount: 1, target: ally }
+
+# === Plot / event key items (story progression) ===
+
+- id: orb_of_light
+  name: Orb of Light
+  type: key
+  price: 0
+  effect: { kind: plot_event, description: "Holy Spring -- needed to heal Zylo's curse." }
+
+- id: moon_stone
+  name: Moon Stone
+  type: key
+  price: 0
+  effect: { kind: plot_event, description: "Trade for Lunar Dew." }
+
+- id: lunar_dew
+  name: Lunar Dew
+  type: key
+  price: 0
+  effect: { kind: plot_event, description: "Cures Zylo's curse." }
+
+- id: domingo_egg
+  name: Domingo Egg
+  type: key
+  price: 0
+  effect: { kind: plot_event, description: "Hatches Domingo when warmed in Manarina." }
+
+- id: kindan_no_hako
+  name: Kindan no Hako
+  type: key
+  price: 0
+  effect: { kind: plot_event, description: "Easter-egg item that levels up the user." }

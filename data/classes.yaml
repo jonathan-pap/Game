@@ -1,8 +1,13 @@
-# Character classes. Promotion: at level 20, base class -> promoted class.
-# learn: list of {spell_id, level} -- spell becomes available at that level.
+# SF1 class roster. Each base class promotes at level 10 (player typically
+# waits until ~20 for stat-carryover advantage).
+# weapon_types map to equipment.yaml entries; movement is the standard SF1
+# value. Empty learn[] means spells are defined per-character (see characters.yaml).
+
+# --- Max ---
 - id: swordsman
   name: Swordsman
   promotes_to: hero
+  promotion_level: 10
   movement: 6
   weapon_types: [sword]
   learn: []
@@ -10,72 +15,280 @@
 - id: hero
   name: Hero
   promotes_to: null
-  movement: 7
+  promotion_level: 10
+  movement: 6
   weapon_types: [sword]
   learn: []
 
+# --- Knight / Paladin (Ken, Mae, Earnest, Vankar, Pelle, Arthur) ---
+- id: knight
+  name: Knight
+  promotes_to: paladin
+  promotion_level: 10
+  movement: 7
+  weapon_types: [spear, lance]
+  learn: []
+
+- id: paladin
+  name: Paladin
+  promotes_to: null
+  promotion_level: 10
+  movement: 7
+  weapon_types: [spear, lance]
+  learn: []
+
+# --- Warrior / Gladiator (Luke, Gort) ---
 - id: warrior
   name: Warrior
   promotes_to: gladiator
-  movement: 5
-  weapon_types: [axe]
+  promotion_level: 10
+  movement: 6
+  weapon_types: [axe, sword]
   learn: []
 
 - id: gladiator
   name: Gladiator
   promotes_to: null
+  promotion_level: 10
   movement: 6
-  weapon_types: [axe]
+  weapon_types: [axe, sword]
   learn: []
 
+# --- Archer / Bowmaster (Hans, Diane) ---
 - id: archer
   name: Archer
-  promotes_to: sniper
-  movement: 6
+  promotes_to: bowmaster
+  promotion_level: 10
+  movement: 5
   weapon_types: [bow]
   learn: []
 
-- id: sniper
-  name: Sniper
+- id: bowmaster
+  name: Bow Master
   promotes_to: null
-  movement: 7
+  promotion_level: 10
+  movement: 5
   weapon_types: [bow]
   learn: []
 
-- id: priest
-  name: Priest
+# --- Healer / Vicar (Lowe, Khris, Torasu) ---
+- id: healer
+  name: Healer
   promotes_to: vicar
+  promotion_level: 10
   movement: 5
   weapon_types: [staff]
-  learn:
-    - { spell: heal, level: 1 }
-    - { spell: detox, level: 5 }
+  learn: []
 
 - id: vicar
   name: Vicar
   promotes_to: null
-  movement: 6
+  promotion_level: 10
+  movement: 5
   weapon_types: [staff]
-  learn:
-    - { spell: heal, level: 1 }
-    - { spell: detox, level: 5 }
-    - { spell: aura, level: 1 }
+  learn: []
 
+# --- Mage / Wizard (Tao, Anri, Alef) ---
 - id: mage
   name: Mage
   promotes_to: wizard
+  promotion_level: 10
   movement: 5
-  weapon_types: [staff]
-  learn:
-    - { spell: blaze, level: 1 }
-    - { spell: freeze, level: 7 }
+  weapon_types: [staff, rod]
+  learn: []
 
 - id: wizard
   name: Wizard
   promotes_to: null
+  promotion_level: 10
+  movement: 5
+  weapon_types: [staff, rod]
+  learn: []
+
+# --- Birdman / Sky Warrior (Balbaroy, Amon) ---
+- id: birdman
+  name: Birdman
+  promotes_to: sky_warrior
+  promotion_level: 10
+  movement: 7
+  weapon_types: [sword]
+  learn: []
+
+- id: sky_warrior
+  name: Sky Warrior
+  promotes_to: null
+  promotion_level: 10
+  movement: 7
+  weapon_types: [sword]
+  learn: []
+
+# --- Werewolf / Wolf Baron (Zylo) ---
+- id: werewolf
+  name: Werewolf
+  promotes_to: wolf_baron
+  promotion_level: 10
+  movement: 7
+  weapon_types: []
+  learn: []
+
+- id: wolf_baron
+  name: Wolf Baron
+  promotes_to: null
+  promotion_level: 10
+  movement: 7
+  weapon_types: []
+  learn: []
+
+# --- Monk / Master Monk (Gong) ---
+- id: monk
+  name: Monk
+  promotes_to: master_monk
+  promotion_level: 10
+  movement: 5
+  weapon_types: []
+  learn: []
+
+- id: master_monk
+  name: Master Monk
+  promotes_to: null
+  promotion_level: 10
+  movement: 5
+  weapon_types: []
+  learn: []
+
+# --- Wing Knight / Sky Lord (Kokichi) ---
+- id: wing_knight
+  name: Wing Knight
+  promotes_to: sky_lord
+  promotion_level: 10
   movement: 6
-  weapon_types: [staff]
-  learn:
-    - { spell: blaze, level: 1 }
-    - { spell: freeze, level: 7 }
-    - { spell: bolt, level: 1 }
+  weapon_types: [spear, lance]
+  learn: []
+
+- id: sky_lord
+  name: Sky Lord
+  promotes_to: null
+  promotion_level: 10
+  movement: 6
+  weapon_types: [spear, lance]
+  learn: []
+
+# --- Steam Knight / Steam Baron (Guntz) ---
+- id: steam_knight
+  name: Steam Knight
+  promotes_to: steam_baron
+  promotion_level: 10
+  movement: 4
+  weapon_types: [spear, lance]
+  learn: []
+
+- id: steam_baron
+  name: Steam Baron
+  promotes_to: null
+  promotion_level: 10
+  movement: 4
+  weapon_types: [spear, lance, bow]
+  learn: []
+
+# --- Assault Knight / Strike Knight (Lyle) -- centaur archer ---
+- id: assault_knight
+  name: Assault Knight
+  promotes_to: strike_knight
+  promotion_level: 10
+  movement: 7
+  weapon_types: [bow]
+  learn: []
+
+- id: strike_knight
+  name: Strike Knight
+  promotes_to: null
+  promotion_level: 10
+  movement: 7
+  weapon_types: [bow]
+  learn: []
+
+# --- Dragon / Great Dragon (Bleu) ---
+- id: dragon
+  name: Dragon
+  promotes_to: great_dragon
+  promotion_level: 10
+  movement: 5
+  weapon_types: []
+  learn: []
+
+- id: great_dragon
+  name: Great Dragon
+  promotes_to: null
+  promotion_level: 10
+  movement: 7
+  weapon_types: []
+  learn: []
+
+# --- Samurai / Great Samurai (Musashi) ---
+- id: samurai
+  name: Samurai
+  promotes_to: great_samurai
+  promotion_level: 10
+  movement: 5
+  weapon_types: [sword]
+  learn: []
+
+- id: great_samurai
+  name: Great Samurai
+  promotes_to: null
+  promotion_level: 10
+  movement: 5
+  weapon_types: [sword]
+  learn: []
+
+# --- Ninja / Great Ninja (Hanzou) ---
+- id: ninja
+  name: Ninja
+  promotes_to: great_ninja
+  promotion_level: 10
+  movement: 5
+  weapon_types: [sword]
+  learn: []
+
+- id: great_ninja
+  name: Great Ninja
+  promotes_to: null
+  promotion_level: 10
+  movement: 5
+  weapon_types: [sword]
+  learn: []
+
+# --- Robot / Cyborg (Adam) ---
+- id: robot
+  name: Robot
+  promotes_to: cyborg
+  promotion_level: 10
+  movement: 4
+  weapon_types: []
+  learn: []
+
+- id: cyborg
+  name: Cyborg
+  promotes_to: null
+  promotion_level: 10
+  movement: 4
+  weapon_types: []
+  learn: []
+
+# --- Magic Creature (Domingo) -- never promotes, already advanced ---
+- id: magic_creature
+  name: Magic Creature
+  promotes_to: null
+  promotion_level: 99
+  movement: 4
+  weapon_types: []
+  learn: []
+
+# --- Yogurt (Jogurt) -- joke class, never promotes ---
+- id: yogurt
+  name: Yogurt
+  promotes_to: null
+  promotion_level: 99
+  movement: 7
+  weapon_types: []
+  learn: []

@@ -1,0 +1,649 @@
+# Shining Force 1 enemy roster, organized by chapter of first appearance.
+# Stats are first-encounter values from RPGClassics & SFC; later-chapter
+# variants of the same monster typically gain +2-4 HP / +3-5 ATK / +1-3 DEF.
+# `chapter` lets future encounter generators scale appropriately.
+#
+# All enemies are templates -- maps spawn one or more instances per template
+# (see data/maps/skirmish.yaml).
+
+# === Chapter 1 ===
+
+- id: goblin
+  name: Goblin
+  side: enemy
+  class: warrior
+  level: 1
+  chapter: 1
+  stats: { hp: 12, mp: 0, atk: 9, def: 6, agi: 5, mov: 5 }
+  growth: { hp: 50, mp: 0, atk: 40, def: 35, agi: 30 }
+  starting_equipment: [short_sword]
+  learn: []
+
+- id: dark_dwarf
+  name: Dark Dwarf
+  side: enemy
+  class: warrior
+  level: 1
+  chapter: 1
+  stats: { hp: 12, mp: 0, atk: 12, def: 8, agi: 5, mov: 4 }
+  growth: { hp: 55, mp: 0, atk: 45, def: 50, agi: 30 }
+  starting_equipment: [hand_axe]
+  learn: []
+
+- id: rune_knight
+  name: Rune Knight
+  side: enemy
+  class: knight
+  level: 1
+  chapter: 1
+  stats: { hp: 14, mp: 0, atk: 16, def: 7, agi: 7, mov: 7 }
+  growth: { hp: 55, mp: 0, atk: 50, def: 45, agi: 45 }
+  starting_equipment: [spear]
+  learn: []
+
+# === Chapter 2 ===
+
+- id: dark_elf
+  name: Dark Elf
+  side: enemy
+  class: archer
+  level: 2
+  chapter: 2
+  stats: { hp: 16, mp: 0, atk: 26, def: 9, agi: 10, mov: 6 }
+  growth: { hp: 50, mp: 0, atk: 55, def: 35, agi: 55 }
+  starting_equipment: [wooden_arrow]
+  learn: []
+
+- id: silver_knight
+  name: Silver Knight
+  side: enemy
+  class: knight
+  level: 2
+  chapter: 2
+  stats: { hp: 16, mp: 0, atk: 18, def: 12, agi: 11, mov: 7 }
+  growth: { hp: 60, mp: 0, atk: 50, def: 55, agi: 50 }
+  starting_equipment: [bronze_lance]
+  learn: []
+
+- id: giant_bat
+  name: Giant Bat
+  side: enemy
+  class: birdman
+  level: 2
+  chapter: 2
+  stats: { hp: 14, mp: 0, atk: 11, def: 6, agi: 9, mov: 7 }
+  growth: { hp: 45, mp: 0, atk: 40, def: 35, agi: 50 }
+  starting_equipment: []
+  learn:
+    - { spell: sleep, level: 1, tier: 1 }
+
+- id: dark_mage
+  name: Dark Mage
+  side: enemy
+  class: mage
+  level: 2
+  chapter: 2
+  stats: { hp: 13, mp: 26, atk: 10, def: 6, agi: 9, mov: 5 }
+  growth: { hp: 45, mp: 70, atk: 40, def: 30, agi: 50 }
+  starting_equipment: []
+  learn:
+    - { spell: blaze, level: 1, tier: 1 }
+    - { spell: blaze, level: 2, tier: 2 }
+
+- id: zombie
+  name: Zombie
+  side: enemy
+  class: warrior
+  level: 2
+  chapter: 2
+  stats: { hp: 15, mp: 0, atk: 18, def: 13, agi: 7, mov: 5 }
+  growth: { hp: 60, mp: 0, atk: 50, def: 50, agi: 30 }
+  starting_equipment: []
+  learn: []
+
+- id: skeleton
+  name: Skeleton
+  side: enemy
+  class: warrior
+  level: 2
+  chapter: 2
+  stats: { hp: 15, mp: 0, atk: 21, def: 16, agi: 7, mov: 6 }
+  growth: { hp: 60, mp: 0, atk: 55, def: 55, agi: 30 }
+  starting_equipment: [long_sword]
+  learn: []
+
+- id: ghoul_boss
+  name: Ghoul
+  side: enemy
+  class: warrior
+  level: 3
+  chapter: 2
+  stats: { hp: 25, mp: 0, atk: 23, def: 14, agi: 9, mov: 6 }
+  growth: { hp: 70, mp: 0, atk: 55, def: 50, agi: 35 }
+  starting_equipment: []
+  learn:
+    - { spell: sleep, level: 1, tier: 1 }
+
+# === Chapter 3 ===
+
+- id: lizardman
+  name: Lizardman
+  side: enemy
+  class: knight
+  level: 3
+  chapter: 3
+  stats: { hp: 20, mp: 0, atk: 24, def: 12, agi: 12, mov: 6 }
+  growth: { hp: 60, mp: 0, atk: 55, def: 50, agi: 50 }
+  starting_equipment: [bronze_lance]
+  learn: []
+
+- id: dark_priest
+  name: Dark Priest
+  side: enemy
+  class: healer
+  level: 3
+  chapter: 3
+  stats: { hp: 16, mp: 25, atk: 21, def: 9, agi: 10, mov: 5 }
+  growth: { hp: 50, mp: 70, atk: 40, def: 40, agi: 45 }
+  starting_equipment: []
+  learn:
+    - { spell: heal, level: 1, tier: 1 }
+
+- id: pegasus_knight
+  name: Pegasus Knight
+  side: enemy
+  class: wing_knight
+  level: 3
+  chapter: 3
+  stats: { hp: 18, mp: 0, atk: 21, def: 16, agi: 12, mov: 7 }
+  growth: { hp: 55, mp: 0, atk: 50, def: 50, agi: 50 }
+  starting_equipment: [spear]
+  learn: []
+
+- id: hellhound
+  name: Hellhound
+  side: enemy
+  class: werewolf
+  level: 3
+  chapter: 3
+  stats: { hp: 19, mp: 0, atk: 10, def: 13, agi: 13, mov: 7 }
+  growth: { hp: 60, mp: 0, atk: 50, def: 50, agi: 55 }
+  starting_equipment: []
+  learn: []
+
+- id: master_mage_boss
+  name: Master Mage
+  side: enemy
+  class: wizard
+  level: 5
+  chapter: 3
+  stats: { hp: 22, mp: 32, atk: 33, def: 13, agi: 26, mov: 5 }
+  growth: { hp: 50, mp: 75, atk: 45, def: 35, agi: 55 }
+  starting_equipment: []
+  learn:
+    - { spell: freeze, level: 1, tier: 2 }
+    - { spell: sleep, level: 1, tier: 1 }
+
+# === Chapter 4 ===
+
+- id: artillery
+  name: Artillery
+  side: enemy
+  class: archer
+  level: 4
+  chapter: 4
+  stats: { hp: 14, mp: 0, atk: 25, def: 15, agi: 14, mov: 4 }
+  growth: { hp: 50, mp: 0, atk: 60, def: 45, agi: 50 }
+  starting_equipment: []
+  learn: []
+
+- id: sniper
+  name: Sniper
+  side: enemy
+  class: archer
+  level: 4
+  chapter: 4
+  stats: { hp: 13, mp: 0, atk: 15, def: 5, agi: 7, mov: 5 }
+  growth: { hp: 45, mp: 0, atk: 50, def: 30, agi: 45 }
+  starting_equipment: [wooden_arrow]
+  learn: []
+
+- id: bowrider
+  name: Bowrider
+  side: enemy
+  class: assault_knight
+  level: 4
+  chapter: 4
+  stats: { hp: 18, mp: 0, atk: 40, def: 11, agi: 14, mov: 7 }
+  growth: { hp: 55, mp: 0, atk: 65, def: 40, agi: 55 }
+  starting_equipment: [steel_arrow]
+  learn: []
+
+- id: mannequin
+  name: Mannequin
+  side: enemy
+  class: warrior
+  level: 4
+  chapter: 4
+  stats: { hp: 16, mp: 0, atk: 16, def: 10, agi: 8, mov: 5 }
+  growth: { hp: 55, mp: 0, atk: 45, def: 45, agi: 35 }
+  starting_equipment: []
+  learn: []
+
+- id: dire_clown
+  name: Dire Clown
+  side: enemy
+  class: warrior
+  level: 4
+  chapter: 4
+  stats: { hp: 15, mp: 0, atk: 18, def: 11, agi: 7, mov: 5 }
+  growth: { hp: 50, mp: 0, atk: 50, def: 45, agi: 35 }
+  starting_equipment: [short_sword]
+  learn: []
+
+- id: evil_puppet
+  name: Evil Puppet
+  side: enemy
+  class: mage
+  level: 4
+  chapter: 4
+  stats: { hp: 14, mp: 15, atk: 14, def: 10, agi: 7, mov: 5 }
+  growth: { hp: 45, mp: 60, atk: 40, def: 35, agi: 40 }
+  starting_equipment: []
+  learn:
+    - { spell: freeze, level: 1, tier: 1 }
+
+- id: elliot_boss
+  name: Elliot
+  side: enemy
+  class: hero
+  level: 8
+  chapter: 4
+  stats: { hp: 60, mp: 0, atk: 32, def: 17, agi: 16, mov: 5 }
+  growth: { hp: 70, mp: 0, atk: 60, def: 50, agi: 50 }
+  starting_equipment: [steel_sword]
+  learn: []
+
+# === Chapter 5 ===
+
+- id: seabat
+  name: Seabat
+  side: enemy
+  class: birdman
+  level: 5
+  chapter: 5
+  stats: { hp: 22, mp: 0, atk: 20, def: 14, agi: 14, mov: 7 }
+  growth: { hp: 55, mp: 0, atk: 50, def: 45, agi: 50 }
+  starting_equipment: []
+  learn: []
+
+- id: conch
+  name: Conch
+  side: enemy
+  class: warrior
+  level: 5
+  chapter: 5
+  stats: { hp: 21, mp: 0, atk: 20, def: 15, agi: 16, mov: 6 }
+  growth: { hp: 55, mp: 0, atk: 50, def: 45, agi: 45 }
+  starting_equipment: []
+  learn: []
+
+- id: shellfish
+  name: Shellfish
+  side: enemy
+  class: warrior
+  level: 5
+  chapter: 5
+  stats: { hp: 25, mp: 0, atk: 23, def: 16, agi: 23, mov: 6 }
+  growth: { hp: 60, mp: 0, atk: 55, def: 50, agi: 50 }
+  starting_equipment: []
+  learn: []
+
+- id: worm
+  name: Worm
+  side: enemy
+  class: warrior
+  level: 5
+  chapter: 5
+  stats: { hp: 17, mp: 0, atk: 20, def: 16, agi: 16, mov: 4 }
+  growth: { hp: 55, mp: 0, atk: 50, def: 50, agi: 45 }
+  starting_equipment: []
+  learn:
+    - { spell: sleep, level: 1, tier: 1 }
+
+- id: gargoyle
+  name: Gargoyle
+  side: enemy
+  class: birdman
+  level: 5
+  chapter: 5
+  stats: { hp: 18, mp: 20, atk: 26, def: 15, agi: 20, mov: 6 }
+  growth: { hp: 50, mp: 60, atk: 50, def: 45, agi: 55 }
+  starting_equipment: []
+  learn:
+    - { spell: muddle, level: 1, tier: 1 }
+    - { spell: sleep, level: 1, tier: 1 }
+
+- id: balbazak_boss
+  name: Balbazak
+  side: enemy
+  class: gladiator
+  level: 9
+  chapter: 5
+  stats: { hp: 65, mp: 0, atk: 34, def: 18, agi: 20, mov: 5 }
+  growth: { hp: 70, mp: 0, atk: 60, def: 55, agi: 50 }
+  starting_equipment: [steel_sword]
+  learn: []
+
+- id: marionette_boss
+  name: Marionette
+  side: enemy
+  class: wizard
+  level: 6
+  chapter: 5
+  stats: { hp: 35, mp: 30, atk: 25, def: 13, agi: 13, mov: 6 }
+  growth: { hp: 60, mp: 70, atk: 45, def: 40, agi: 45 }
+  starting_equipment: []
+  learn:
+    - { spell: freeze, level: 1, tier: 3 }
+
+# === Chapter 6 ===
+
+- id: golem
+  name: Golem
+  side: enemy
+  class: warrior
+  level: 6
+  chapter: 6
+  stats: { hp: 17, mp: 0, atk: 28, def: 28, agi: 16, mov: 4 }
+  growth: { hp: 60, mp: 0, atk: 55, def: 65, agi: 40 }
+  starting_equipment: []
+  learn: []
+
+- id: high_priest
+  name: High Priest
+  side: enemy
+  class: vicar
+  level: 6
+  chapter: 6
+  stats: { hp: 20, mp: 33, atk: 13, def: 14, agi: 7, mov: 6 }
+  growth: { hp: 55, mp: 75, atk: 35, def: 45, agi: 45 }
+  starting_equipment: []
+  learn:
+    - { spell: heal, level: 1, tier: 4 }
+
+- id: belial
+  name: Belial
+  side: enemy
+  class: birdman
+  level: 6
+  chapter: 6
+  stats: { hp: 21, mp: 35, atk: 26, def: 20, agi: 22, mov: 6 }
+  growth: { hp: 55, mp: 65, atk: 50, def: 50, agi: 55 }
+  starting_equipment: []
+  learn:
+    - { spell: bolt, level: 1, tier: 1 }
+    - { spell: muddle, level: 1, tier: 1 }
+
+- id: minotaur
+  name: Minotaur
+  side: enemy
+  class: gladiator
+  level: 7
+  chapter: 6
+  stats: { hp: 31, mp: 0, atk: 46, def: 30, agi: 31, mov: 5 }
+  growth: { hp: 65, mp: 0, atk: 65, def: 55, agi: 50 }
+  starting_equipment: [battle_axe]
+  learn: []
+
+- id: ice_worm
+  name: Ice Worm
+  side: enemy
+  class: warrior
+  level: 7
+  chapter: 6
+  stats: { hp: 30, mp: 12, atk: 40, def: 25, agi: 26, mov: 5 }
+  growth: { hp: 65, mp: 50, atk: 60, def: 55, agi: 50 }
+  starting_equipment: []
+  learn:
+    - { spell: freeze, level: 1, tier: 2 }
+    - { spell: sleep, level: 1, tier: 1 }
+
+- id: wyvern
+  name: Wyvern
+  side: enemy
+  class: dragon
+  level: 7
+  chapter: 6
+  stats: { hp: 32, mp: 0, atk: 39, def: 30, agi: 31, mov: 7 }
+  growth: { hp: 65, mp: 0, atk: 60, def: 55, agi: 55 }
+  starting_equipment: []
+  learn: []
+
+# === Chapter 7 ===
+
+- id: horseman
+  name: Horseman
+  side: enemy
+  class: paladin
+  level: 8
+  chapter: 7
+  stats: { hp: 24, mp: 0, atk: 53, def: 16, agi: 17, mov: 7 }
+  growth: { hp: 60, mp: 0, atk: 65, def: 45, agi: 50 }
+  starting_equipment: [chrome_lance]
+  learn: []
+
+- id: cerberus
+  name: Cerberus
+  side: enemy
+  class: wolf_baron
+  level: 8
+  chapter: 7
+  stats: { hp: 27, mp: 0, atk: 42, def: 26, agi: 38, mov: 7 }
+  growth: { hp: 65, mp: 0, atk: 60, def: 55, agi: 60 }
+  starting_equipment: []
+  learn: []
+
+- id: demon_master
+  name: Demon Master
+  side: enemy
+  class: wizard
+  level: 8
+  chapter: 7
+  stats: { hp: 27, mp: 46, atk: 48, def: 24, agi: 47, mov: 6 }
+  growth: { hp: 55, mp: 75, atk: 50, def: 45, agi: 60 }
+  starting_equipment: []
+  learn:
+    - { spell: freeze, level: 1, tier: 3 }
+
+- id: durahan
+  name: Durahan
+  side: enemy
+  class: gladiator
+  level: 8
+  chapter: 7
+  stats: { hp: 22, mp: 0, atk: 41, def: 30, agi: 13, mov: 5 }
+  growth: { hp: 60, mp: 0, atk: 60, def: 55, agi: 35 }
+  starting_equipment: [steel_sword]
+  learn:
+    - { spell: sleep, level: 1, tier: 1 }
+
+- id: armed_skeleton
+  name: Armed Skeleton
+  side: enemy
+  class: gladiator
+  level: 9
+  chapter: 7
+  stats: { hp: 36, mp: 0, atk: 62, def: 33, agi: 32, mov: 5 }
+  growth: { hp: 65, mp: 0, atk: 65, def: 55, agi: 45 }
+  starting_equipment: [broad_sword]
+  learn: []
+
+- id: laser_eye
+  name: Laser Eye
+  side: enemy
+  class: magic_creature
+  level: 7
+  chapter: 7
+  stats: { hp: 30, mp: 0, atk: 14, def: 19, agi: 27, mov: 1 }
+  growth: { hp: 50, mp: 0, atk: 35, def: 50, agi: 50 }
+  starting_equipment: []
+  learn: []
+
+- id: torch_eye
+  name: Torch Eye
+  side: enemy
+  class: magic_creature
+  level: 8
+  chapter: 7
+  stats: { hp: 28, mp: 0, atk: 42, def: 32, agi: 27, mov: 6 }
+  growth: { hp: 55, mp: 0, atk: 55, def: 55, agi: 50 }
+  starting_equipment: []
+  learn: []
+
+- id: mishaela_boss
+  name: Mishaela
+  side: enemy
+  class: wizard
+  level: 12
+  chapter: 7
+  stats: { hp: 65, mp: 60, atk: 42, def: 30, agi: 35, mov: 6 }
+  growth: { hp: 65, mp: 75, atk: 55, def: 50, agi: 55 }
+  starting_equipment: []
+  learn:
+    - { spell: bolt, level: 1, tier: 2 }
+    - { spell: demon_breath, level: 1, tier: 1 }
+
+# === Chapter 8 ===
+
+- id: jet
+  name: Jet
+  side: enemy
+  class: birdman
+  level: 9
+  chapter: 8
+  stats: { hp: 28, mp: 0, atk: 45, def: 32, agi: 33, mov: 7 }
+  growth: { hp: 60, mp: 0, atk: 60, def: 55, agi: 60 }
+  starting_equipment: []
+  learn: []
+
+- id: steel_claw
+  name: Steel Claw
+  side: enemy
+  class: warrior
+  level: 9
+  chapter: 8
+  stats: { hp: 25, mp: 0, atk: 43, def: 31, agi: 31, mov: 5 }
+  growth: { hp: 60, mp: 0, atk: 60, def: 55, agi: 55 }
+  starting_equipment: []
+  learn: []
+
+- id: blue_dragon
+  name: Blue Dragon
+  side: enemy
+  class: great_dragon
+  level: 10
+  chapter: 8
+  stats: { hp: 50, mp: 0, atk: 63, def: 32, agi: 42, mov: 5 }
+  growth: { hp: 70, mp: 0, atk: 65, def: 55, agi: 60 }
+  starting_equipment: []
+  learn: []
+
+- id: chimera
+  name: Chimera
+  side: enemy
+  class: great_dragon
+  level: 10
+  chapter: 8
+  stats: { hp: 56, mp: 0, atk: 65, def: 30, agi: 40, mov: 6 }
+  growth: { hp: 70, mp: 0, atk: 65, def: 55, agi: 55 }
+  starting_equipment: []
+  learn: []
+
+- id: chaos_boss
+  name: Chaos
+  side: enemy
+  class: magic_creature
+  level: 12
+  chapter: 8
+  stats: { hp: 65, mp: 0, atk: 50, def: 35, agi: 32, mov: 6 }
+  growth: { hp: 70, mp: 0, atk: 60, def: 55, agi: 55 }
+  starting_equipment: []
+  learn: []
+
+- id: colossus_boss
+  name: Colossus
+  side: enemy
+  class: magic_creature
+  level: 12
+  chapter: 8
+  stats: { hp: 65, mp: 60, atk: 50, def: 40, agi: 37, mov: 4 }
+  growth: { hp: 70, mp: 60, atk: 60, def: 60, agi: 55 }
+  starting_equipment: []
+  learn:
+    - { spell: blaze, level: 1, tier: 3 }
+    - { spell: freeze, level: 1, tier: 3 }
+    - { spell: bolt, level: 1, tier: 3 }
+
+- id: kane_boss
+  name: Kane
+  side: enemy
+  class: hero
+  level: 14
+  chapter: 8
+  stats: { hp: 70, mp: 24, atk: 65, def: 30, agi: 29, mov: 6 }
+  growth: { hp: 70, mp: 50, atk: 65, def: 55, agi: 55 }
+  starting_equipment: [sword_of_darkness]
+  learn:
+    - { spell: desoul, level: 1, tier: 1 }
+
+- id: ramladu_boss
+  name: Ramladu
+  side: enemy
+  class: paladin
+  level: 16
+  chapter: 8
+  stats: { hp: 99, mp: 50, atk: 93, def: 40, agi: 49, mov: 6 }
+  growth: { hp: 75, mp: 50, atk: 70, def: 60, agi: 55 }
+  starting_equipment: [chrome_lance]
+  learn:
+    - { spell: aura, level: 1, tier: 3 }
+
+- id: darksol_boss
+  name: Darksol
+  side: enemy
+  class: wizard
+  level: 18
+  chapter: 8
+  stats: { hp: 150, mp: 90, atk: 40, def: 35, agi: 54, mov: 6 }
+  growth: { hp: 80, mp: 80, atk: 50, def: 50, agi: 60 }
+  starting_equipment: []
+  learn:
+    - { spell: demon_breath, level: 1, tier: 2 }
+
+- id: dark_dragon_side
+  name: Dark Dragon (head)
+  side: enemy
+  class: magic_creature
+  level: 20
+  chapter: 8
+  stats: { hp: 240, mp: 99, atk: 65, def: 40, agi: 60, mov: 0 }
+  growth: { hp: 85, mp: 80, atk: 65, def: 60, agi: 60 }
+  starting_equipment: []
+  learn:
+    - { spell: blaze, level: 1, tier: 2 }
+    - { spell: freeze, level: 1, tier: 2 }
+    - { spell: bolt, level: 1, tier: 4 }
+
+- id: dark_dragon_main
+  name: Dark Dragon
+  side: enemy
+  class: magic_creature
+  level: 20
+  chapter: 8
+  stats: { hp: 280, mp: 99, atk: 65, def: 40, agi: 60, mov: 0 }
+  growth: { hp: 85, mp: 80, atk: 65, def: 60, agi: 60 }
+  starting_equipment: []
+  learn:
+    - { spell: desoul, level: 1, tier: 1 }
+    - { spell: demon_breath, level: 1, tier: 2 }

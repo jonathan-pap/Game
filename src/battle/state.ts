@@ -85,21 +85,21 @@ export function buildBattleState(mapId: string, data: GameData): BattleState {
         break;
       }
     }
-    // Resolve known spells: walk the class.learn entries and add any whose
-    // required level is <= the unit's current level. If the same spell appears
-    // multiple times (e.g., Heal at lv1 tier1, Heal at lv8 tier2), the latest
-    // qualifying entry wins.
+    // Resolve known spells. SF1's spell-learning is per-character (Lowe and
+    // Khris are both Healers but learn different rotations), so character.learn
+    // takes precedence. If the character has no learn entries, fall back to
+    // class.learn as a default. For any given spell id, the highest qualifying
+    // tier wins.
     const klass = classById.get(tmpl.class);
+    const learnEntries = tmpl.learn.length > 0 ? tmpl.learn : klass?.learn ?? [];
     const learnedById = new Map<string, KnownSpell>();
-    if (klass) {
-      for (const learn of klass.learn) {
-        if (tmpl.level < learn.level) continue;
-        const spell = spellById.get(learn.spell);
-        if (!spell) continue;
-        const prev = learnedById.get(spell.id);
-        if (!prev || learn.tier > prev.tier) {
-          learnedById.set(spell.id, { spell, tier: learn.tier });
-        }
+    for (const learn of learnEntries) {
+      if (tmpl.level < learn.level) continue;
+      const spell = spellById.get(learn.spell);
+      if (!spell) continue;
+      const prev = learnedById.get(spell.id);
+      if (!prev || learn.tier > prev.tier) {
+        learnedById.set(spell.id, { spell, tier: learn.tier });
       }
     }
     const knownSpells = Array.from(learnedById.values());
