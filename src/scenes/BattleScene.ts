@@ -18,7 +18,7 @@ import { planEnemyTurn } from "../battle/ai";
 import { canCast, resolveSpell, spellTargetTiles, SpellResult } from "../battle/magic";
 import { playCutin } from "../battle/Cutin";
 import { renderHero, renderEnemy, clearPanes } from "../ui/StatsPanel";
-import { hideAllMenus, showActionMenu, showSpellMenu } from "../ui/Menus";
+import { handleKey, hideAllMenus, setBarStatus, showActionMenu, showSpellMenu } from "../ui/Menus";
 
 const SIDE_COLOR: Record<"player" | "enemy", number> = {
   player: 0x4a90e2,
@@ -91,10 +91,19 @@ export class BattleScene extends Phaser.Scene {
 
     this.input.on("pointerdown", this.handleClick, this);
     this.input.keyboard?.on("keydown-ESC", () => this.cancelToMenu());
+    // Forward letter/number key hotkeys to the action bar.
+    this.input.keyboard?.on("keydown", (e: KeyboardEvent) => {
+      if (e.key === "Escape") return; // handled above
+      handleKey(e.key);
+    });
 
     this.turn = new TurnManager(this.state);
     this.turn.on((e) => this.onTurnEvent(e.kind, e));
-    this.turn.start();
+    // Defer the first round so we're outside Phaser's create stack frame.
+    // Timers (this.time.delayedCall) only fire reliably after the scene's
+    // update loop has begun ticking; synchronous calls into runEnemyTurn from
+    // here would otherwise hang on the first awaited delay.
+    this.time.delayedCall(0, () => this.turn.start());
   }
 
   // --- turn loop ---
@@ -132,6 +141,7 @@ export class BattleScene extends Phaser.Scene {
     } else {
       this.phase = "animating";
       this.updateHud(`Enemy turn: ${u.template.name}`);
+      setBarStatus(`Enemy turn: ${u.template.name} (${u.template.class})`);
       this.inspectedEnemy = u;
       renderEnemy(u, true);
       this.refreshPanes();
@@ -236,13 +246,18 @@ export class BattleScene extends Phaser.Scene {
     this.clearHighlights();
     const canAttack = this.enemiesInRangeFromHere(u).length > 0;
     const canMagic = u.knownSpells.some((k) => canCast(u, k));
-    showActionMenu(this.unitScreenAnchor(u), { canAttack, canMagic, canCancel: !!this.preMovePos }, (choice) => {
-      if (choice === "attack") this.enterAttackTarget(u);
-      else if (choice === "magic") this.openSpellMenu(u);
-      else if (choice === "stay") this.endActiveTurn();
-      else if (choice === "cancel") this.cancelMove(u);
-    });
-    this.updateHud(`${u.template.name}: choose action.`);
+    showActionMenu(
+      null,
+      { canAttack, canMagic, canCancel: !!this.preMovePos },
+      (choice) => {
+        if (choice === "attack") this.enterAttackTarget(u);
+        else if (choice === "magic") this.openSpellMenu(u);
+        else if (choice === "stay") this.endActiveTurn();
+        else if (choice === "cancel") this.cancelMove(u);
+      },
+      `${u.template.name} - choose action`
+    );
+    this.updateHud(`${u.template.name}: choose action (A/M/S/C or click).`);
   }
 
   private cancelMove(u: UnitInstance) {
@@ -266,6 +281,7 @@ export class BattleScene extends Phaser.Scene {
     this.reachableTiles.clear();
     this.spellTargets.clear();
     this.drawHighlights();
+    setBarStatus(`${u.template.name}: click an enemy to attack  (Esc cancels)`);
     this.updateHud(`${u.template.name}: click an enemy to attack (Esc to cancel).`);
   }
 
@@ -305,7 +321,7 @@ export class BattleScene extends Phaser.Scene {
   // --- spell menu / targeting ---
 
   private openSpellMenu(u: UnitInstance) {
-    showSpellMenu(this.unitScreenAnchor(u), u, (chosen) => {
+    showSpellMenu(null, u, (chosen) => {
       if (!chosen) {
         // Back to action menu.
         this.openActionMenu(u);
@@ -314,7 +330,7 @@ export class BattleScene extends Phaser.Scene {
       this.activeSpell = chosen;
       this.enterSpellTarget(u);
     });
-    this.updateHud(`${u.template.name}: pick a spell.`);
+    this.updateHud(`${u.template.name}: pick a spell (1-9 or click; C to cancel).`);
   }
 
   private enterSpellTarget(u: UnitInstance) {
@@ -325,6 +341,9 @@ export class BattleScene extends Phaser.Scene {
     this.reachableTiles.clear();
     this.attackTargets.clear();
     this.drawHighlights();
+    setBarStatus(
+      `${u.template.name} casts ${this.activeSpell.spell.name} - click a target  (Esc cancels)`
+    );
     this.updateHud(
       `${u.template.name} casts ${this.activeSpell.spell.name} - click a target (Esc to cancel).`
     );
@@ -436,15 +455,6 @@ export class BattleScene extends Phaser.Scene {
       const d = Math.abs(e.pos.x - u.pos.x) + Math.abs(e.pos.y - u.pos.y);
       return d >= min && d <= max;
     });
-  }
-
-  private unitScreenAnchor(u: UnitInstance): { x: number; y: number } {
-    const canvas = this.game.canvas;
-    const r = canvas.getBoundingClientRect();
-    return {
-      x: r.left + u.pos.x * TILE_SIZE + TILE_SIZE / 2,
-      y: r.top + u.pos.y * TILE_SIZE + TILE_SIZE / 2,
-    };
   }
 
   private computeMoveAndAttack(u: UnitInstance) {

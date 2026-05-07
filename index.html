@@ -7,7 +7,40 @@
     <style>
       html, body { margin: 0; padding: 0; background: #111; color: #eee; font-family: system-ui, sans-serif; }
       .layout { display: flex; min-height: 100vh; align-items: center; justify-content: center; gap: 16px; padding: 16px; box-sizing: border-box; }
+      .center { display: flex; flex-direction: column; gap: 8px; align-items: center; }
       #game { flex: 0 0 auto; }
+      .actionbar {
+        width: 512px;
+        min-height: 44px;
+        display: flex;
+        gap: 6px;
+        background: #15171a;
+        border: 2px solid #3a3f48;
+        border-radius: 4px;
+        padding: 8px 10px;
+        font-family: 'Courier New', Courier, monospace;
+        color: #f0f0f0;
+        align-items: center;
+        flex-wrap: wrap;
+        box-sizing: border-box;
+      }
+      .actionbar.menu-on { border-color: #ffe14a; box-shadow: 0 0 0 1px #ffe14a55 inset; }
+      .actionbar .label { font-size: 11px; color: #ffe14a; text-transform: uppercase; letter-spacing: 1px; margin-right: 4px; }
+      .actionbar .empty-label { font-size: 12px; color: #555; font-style: italic; }
+      .actionbar button {
+        background: #1f242c;
+        color: #f0f0f0;
+        border: 1px solid #2a3340;
+        padding: 6px 12px;
+        font-family: inherit;
+        font-size: 13px;
+        cursor: pointer;
+        border-radius: 3px;
+      }
+      .actionbar button:hover:not(:disabled) { background: #2a4060; border-color: #4a90e2; }
+      .actionbar button:disabled { color: #555; cursor: not-allowed; border-color: #222; background: #181a1e; }
+      .actionbar button .meta { color: #888; font-size: 11px; margin-left: 4px; }
+      .actionbar button .key { color: #ffe14a; font-weight: bold; }
       .pane {
         width: 240px;
         align-self: center;
@@ -79,13 +112,16 @@
       <div class="pane hero" id="hero-pane">
         <div class="empty">Click a hero to view stats</div>
       </div>
-      <div id="game"></div>
+      <div class="center">
+        <div id="game"></div>
+        <div id="action-bar" class="actionbar">
+          <span class="empty-label">It's no one's turn yet.</span>
+        </div>
+      </div>
       <div class="pane enemy" id="enemy-pane">
         <div class="empty">Click an enemy to view stats</div>
       </div>
     </div>
-    <div id="action-menu" class="menu hidden"></div>
-    <div id="spell-menu" class="menu hidden"></div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

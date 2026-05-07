@@ -22,10 +22,12 @@ const SIDE_BG: Record<"player" | "enemy", number> = {
 };
 
 // Run a cut-in. Returns a Promise that resolves when it's done.
+// Default total runtime is ~1.5s: ~0.4s slide-in, ~0.9s readable hold,
+// ~0.2s slide-out. Override with opts.duration if you want something snappier.
 export function playCutin(scene: Phaser.Scene, opts: CutinOpts): Promise<void> {
   const W = scene.scale.width;
   const H = scene.scale.height;
-  const dur = opts.duration ?? 700;
+  const dur = opts.duration ?? 1500;
 
   // Backdrop dim.
   const dim = scene.add.rectangle(0, 0, W, H, 0x000000, 0.55).setOrigin(0, 0).setDepth(900);
@@ -91,14 +93,15 @@ export function playCutin(scene: Phaser.Scene, opts: CutinOpts): Promise<void> {
     .setDepth(902)
     .setAlpha(0);
 
-  // Effect text (damage/heal number) appears mid-screen over the defender side.
+  // Big effect text in the middle of the screen so it doesn't compete with
+  // the corner names. Damage/heal numbers should pop visually.
   const fx = scene.add
-    .text(W * 0.82, H - bannerH / 2 - 40, opts.effectText, {
+    .text(W / 2, H / 2, opts.effectText, {
       fontFamily: "monospace",
-      fontSize: "32px",
+      fontSize: "44px",
       color: opts.effectColor,
       stroke: "#000000",
-      strokeThickness: 4,
+      strokeThickness: 6,
     })
     .setOrigin(0.5, 0.5)
     .setDepth(903)
@@ -106,20 +109,21 @@ export function playCutin(scene: Phaser.Scene, opts: CutinOpts): Promise<void> {
     .setScale(2);
 
   return new Promise<void>((resolve) => {
-    // Slide banners in.
-    scene.tweens.add({ targets: aBanner, x: 0, duration: 180, ease: "Quad.easeOut" });
-    scene.tweens.add({ targets: dBanner, x: 0, duration: 180, ease: "Quad.easeOut" });
-    scene.tweens.add({ targets: [aText, aClass, dText, dClass], alpha: 1, duration: 180, delay: 120 });
-    // Slash-impact effect on the fx text.
+    // Slide banners + names in over ~0.4s.
+    scene.tweens.add({ targets: aBanner, x: 0, duration: 280, ease: "Quad.easeOut" });
+    scene.tweens.add({ targets: dBanner, x: 0, duration: 280, ease: "Quad.easeOut" });
+    scene.tweens.add({ targets: [aText, aClass, dText, dClass], alpha: 1, duration: 220, delay: 200 });
+    // Slash-impact effect on the fx text, slightly delayed so the eye lands
+    // on the names first, then the damage punches in.
     scene.tweens.add({
       targets: fx,
       alpha: 1,
       scale: 1,
-      duration: 160,
-      delay: 220,
+      duration: 220,
+      delay: 380,
       ease: "Back.easeOut",
     });
-    // Hold, then slide everything off and clean up.
+    // Hold to read, then slide everything off and clean up.
     scene.time.delayedCall(dur, () => {
       const cleanup = () => {
         dim.destroy();
@@ -132,17 +136,17 @@ export function playCutin(scene: Phaser.Scene, opts: CutinOpts): Promise<void> {
         fx.destroy();
         resolve();
       };
-      scene.tweens.add({ targets: aBanner, x: -W, duration: 160, ease: "Quad.easeIn" });
+      scene.tweens.add({ targets: aBanner, x: -W, duration: 220, ease: "Quad.easeIn" });
       scene.tweens.add({
         targets: dBanner,
         x: W,
-        duration: 160,
+        duration: 220,
         ease: "Quad.easeIn",
       });
       scene.tweens.add({
         targets: [aText, aClass, dText, dClass, fx, dim],
         alpha: 0,
-        duration: 160,
+        duration: 220,
         onComplete: cleanup,
       });
     });
