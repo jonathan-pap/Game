@@ -3,6 +3,7 @@
 // (or null to show the empty state).
 
 import { UnitInstance } from "../battle/state";
+import { portraitSvgFor } from "./portraits";
 
 const heroEl = () => document.getElementById("hero-pane");
 const enemyEl = () => document.getElementById("enemy-pane");
@@ -21,14 +22,14 @@ function bar(current: number, max: number, kind: "hp" | "mp"): string {
 
 function renderUnit(unit: UnitInstance, side: "hero" | "enemy", active: boolean): string {
   const t = unit.template;
-  const initial = escapeHtml(t.name[0] ?? "?");
   const weaponName = unit.weapon ? unit.weapon.name : "(unarmed)";
   const wRange = unit.weapon?.range ? `${unit.weapon.range.min}-${unit.weapon.range.max}` : "1";
   const wAtk = unit.weapon?.stats?.atk ?? 0;
   const totalAtk = t.stats.atk + wAtk;
+  const portraitSvg = portraitSvgFor(unit);
   return `
     <div class="head">
-      <div class="portrait ${side}">${initial}</div>
+      <div class="portrait ${side} svg-portrait">${portraitSvg}</div>
       <div class="meta">
         <div class="name">${escapeHtml(t.name)}</div>
         <div class="cls">${escapeHtml(t.class)} &middot; Lv ${t.level}${active ? " &middot; ACTIVE" : ""}</div>
