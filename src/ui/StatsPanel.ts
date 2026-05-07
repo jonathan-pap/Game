@@ -26,7 +26,7 @@ function renderUnit(unit: UnitInstance, side: "hero" | "enemy", active: boolean)
   const wRange = unit.weapon?.range ? `${unit.weapon.range.min}-${unit.weapon.range.max}` : "1";
   const wAtk = unit.weapon?.stats?.atk ?? 0;
   const totalAtk = t.stats.atk + wAtk;
-  const portraitSvg = portraitSvgFor(unit);
+  const portraitSvg = portraitSvgFor(unit.template);
   return `
     <div class="head">
       <div class="portrait ${side} svg-portrait">${portraitSvg}</div>

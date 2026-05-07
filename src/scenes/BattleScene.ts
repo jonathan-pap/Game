@@ -18,6 +18,7 @@ import { planEnemyTurn } from "../battle/ai";
 import { canCast, resolveSpell, spellTargetTiles, SpellResult } from "../battle/magic";
 import { playCutin } from "../battle/Cutin";
 import { renderHero, renderEnemy, clearPanes } from "../ui/StatsPanel";
+import { portraitTextureKey } from "../ui/portraits";
 import {
   handleKey,
   hideAllMenus,
@@ -614,27 +615,54 @@ export class BattleScene extends Phaser.Scene {
 
   private makeUnitView(u: UnitInstance): Phaser.GameObjects.Container {
     const container = this.add.container(u.pos.x * TILE_SIZE, u.pos.y * TILE_SIZE);
-    const pad = 3;
-    const body = this.add.rectangle(
-      pad,
-      pad,
-      TILE_SIZE - pad * 2,
-      TILE_SIZE - pad * 2,
-      SIDE_COLOR[u.template.side]
+    const sideColor = SIDE_COLOR[u.template.side];
+
+    // Side-color border + dark inner background so the portrait reads
+    // clearly against terrain.
+    const border = this.add.rectangle(0, 0, TILE_SIZE, TILE_SIZE, sideColor);
+    border.setOrigin(0, 0);
+    const innerPad = 1;
+    const innerBg = this.add.rectangle(
+      innerPad,
+      innerPad,
+      TILE_SIZE - innerPad * 2,
+      TILE_SIZE - innerPad * 2,
+      0x10131c
     );
-    body.setOrigin(0, 0);
-    body.setStrokeStyle(1, 0xffffff, 0.6);
-    const label = this.add.text(TILE_SIZE / 2, TILE_SIZE / 2 - 4, u.template.name[0], {
-      fontFamily: "monospace",
-      fontSize: "14px",
-      color: "#ffffff",
-    });
-    label.setOrigin(0.5, 0.5);
-    const barBg = this.add.rectangle(pad, TILE_SIZE - pad - 3, TILE_SIZE - pad * 2, 3, 0x000000, 0.8);
+    innerBg.setOrigin(0, 0);
+    container.add([border, innerBg]);
+
+    // Portrait sprite -- use texture if preloaded, otherwise fall back to
+    // the colored block + initial.
+    const key = portraitTextureKey(u.template.id);
+    if (this.textures.exists(key)) {
+      const portrait = this.add.image(TILE_SIZE / 2, TILE_SIZE / 2, key);
+      portrait.setDisplaySize(TILE_SIZE - innerPad * 2, TILE_SIZE - innerPad * 2);
+      container.add(portrait);
+    } else {
+      const fallback = this.add.rectangle(
+        innerPad,
+        innerPad,
+        TILE_SIZE - innerPad * 2,
+        TILE_SIZE - innerPad * 2,
+        sideColor
+      );
+      fallback.setOrigin(0, 0);
+      const label = this.add.text(TILE_SIZE / 2, TILE_SIZE / 2 - 4, u.template.name[0], {
+        fontFamily: "monospace",
+        fontSize: "14px",
+        color: "#ffffff",
+      });
+      label.setOrigin(0.5, 0.5);
+      container.add([fallback, label]);
+    }
+
+    // HP bar at the bottom edge.
+    const barBg = this.add.rectangle(0, TILE_SIZE - 3, TILE_SIZE, 3, 0x000000, 0.85);
     barBg.setOrigin(0, 0);
-    const bar = this.add.rectangle(pad, TILE_SIZE - pad - 3, TILE_SIZE - pad * 2, 3, 0x55ff55);
+    const bar = this.add.rectangle(0, TILE_SIZE - 3, TILE_SIZE, 3, 0x55ff55);
     bar.setOrigin(0, 0);
-    container.add([body, label, barBg, bar]);
+    container.add([barBg, bar]);
     container.setData("unit", u);
     container.setData("hpBar", bar);
     this.refreshUnitView(u, container);
@@ -652,8 +680,7 @@ export class BattleScene extends Phaser.Scene {
   private refreshUnitView(u: UnitInstance, container: Phaser.GameObjects.Container) {
     const bar = container.getData("hpBar") as Phaser.GameObjects.Rectangle;
     const ratio = Math.max(0, u.hp / u.template.stats.hp);
-    const pad = 3;
-    bar.width = (TILE_SIZE - pad * 2) * ratio;
+    bar.width = TILE_SIZE * ratio;
     bar.fillColor = ratio > 0.5 ? 0x55ff55 : ratio > 0.25 ? 0xffaa33 : 0xff3333;
   }
 

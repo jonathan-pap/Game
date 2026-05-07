@@ -6,7 +6,7 @@
 // SVG string (drawn over the standard frame + background). The wrapper
 // function stitches frame, gradient backdrop, content, and frame border.
 
-import { UnitInstance } from "../battle/state";
+import Phaser from "phaser";
 
 export interface Palette {
   skin: string;
@@ -758,15 +758,56 @@ const ENEMY_ARCHETYPE_BY_ID: Record<string, ArchetypeFn> = {
 
 // --- public API -------------------------------------------------------
 
-export function portraitSvgFor(unit: UnitInstance): string {
-  const id = unit.template.id;
-  const klass = unit.template.class;
-  const palette = CHARACTER_PALETTES[id] ?? CLASS_PALETTES[klass] ?? DEFAULT_PALETTE;
+// Anything that has at minimum an id + class string. Character templates
+// satisfy this directly; UnitInstance callers should pass unit.template.
+export interface PortraitSubject {
+  id: string;
+  class: string;
+  name?: string;
+}
+
+export function portraitSvgFor(subject: PortraitSubject): string {
+  const palette =
+    CHARACTER_PALETTES[subject.id] ?? CLASS_PALETTES[subject.class] ?? DEFAULT_PALETTE;
 
   const archetype =
-    ENEMY_ARCHETYPE_BY_ID[id] ??
-    CLASS_TO_ARCHETYPE[klass] ??
-    ((p: Palette) => generic(p, unit.template.name));
+    ENEMY_ARCHETYPE_BY_ID[subject.id] ??
+    CLASS_TO_ARCHETYPE[subject.class] ??
+    ((p: Palette) => generic(p, subject.name ?? subject.id));
 
   return archetype(palette);
+}
+
+// Preload a portrait into a Phaser scene's texture cache so it can be used
+// as an image sprite on battle tiles. Returns a promise that resolves once
+// the texture is registered.
+export function preloadPortraitTexture(
+  scene: Phaser.Scene,
+  textureKey: string,
+  svgString: string
+): Promise<void> {
+  if (scene.textures.exists(textureKey)) return Promise.resolve();
+  return new Promise<void>((resolve) => {
+    const blob = new Blob([svgString], { type: "image/svg+xml" });
+    const url = URL.createObjectURL(blob);
+    const img = new Image();
+    img.onload = () => {
+      try {
+        scene.textures.addImage(textureKey, img);
+      } catch (e) {
+        // already registered or other texture cache issue; ignore
+      }
+      URL.revokeObjectURL(url);
+      resolve();
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      resolve();
+    };
+    img.src = url;
+  });
+}
+
+export function portraitTextureKey(id: string): string {
+  return `portrait_${id}`;
 }
