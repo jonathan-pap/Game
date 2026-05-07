@@ -18,7 +18,14 @@ import { planEnemyTurn } from "../battle/ai";
 import { canCast, resolveSpell, spellTargetTiles, SpellResult } from "../battle/magic";
 import { playCutin } from "../battle/Cutin";
 import { renderHero, renderEnemy, clearPanes } from "../ui/StatsPanel";
-import { handleKey, hideAllMenus, setBarStatus, showActionMenu, showSpellMenu } from "../ui/Menus";
+import {
+  handleKey,
+  hideAllMenus,
+  setBarStatus,
+  showActionMenu,
+  showSelectUnit,
+  showSpellMenu,
+} from "../ui/Menus";
 
 const SIDE_COLOR: Record<"player" | "enemy", number> = {
   player: 0x4a90e2,
@@ -33,6 +40,7 @@ const REACH_ALPHA = 0.25;
 
 type Phase =
   | "idle"
+  | "select_unit" // player phase, no active unit -- click any unacted player unit
   | "select_move"
   | "menu"
   | "select_attack_target"
@@ -108,9 +116,22 @@ export class BattleScene extends Phaser.Scene {
 
   // --- turn loop ---
 
-  private onTurnEvent(kind: string, e: { unit?: UnitInstance; outcome?: "victory" | "defeat" }) {
+  private onTurnEvent(
+    kind: string,
+    e: { unit?: UnitInstance; outcome?: "victory" | "defeat"; side?: "player" | "enemy" }
+  ) {
     if (kind === "turn_start" && e.unit) {
       this.beginUnitTurn(e.unit);
+    } else if (kind === "phase_start") {
+      this.dimDoneUnits();
+      if (e.side === "player") {
+        this.updateHud("Player Phase - click any of your units to act.");
+      } else {
+        this.updateHud("Enemy Phase...");
+        setBarStatus("Enemy Phase");
+      }
+    } else if (kind === "player_idle") {
+      this.enterSelectUnit();
     } else if (kind === "battle_end") {
       this.phase = "ended";
       this.clearHighlights();
@@ -121,6 +142,16 @@ export class BattleScene extends Phaser.Scene {
         e.outcome === "victory" ? "VICTORY! All enemies defeated." : "DEFEAT. All heroes fallen."
       );
     }
+  }
+
+  private enterSelectUnit() {
+    this.phase = "select_unit";
+    this.clearHighlights();
+    this.dimDoneUnits();
+    this.drawSelectableHints();
+    const unacted = this.turn.unactedPlayerUnits().length;
+    showSelectUnit(unacted, () => this.turn.endPlayerPhase());
+    this.updateHud(`Player Phase - pick a unit (${unacted} left), or End Phase (E).`);
   }
 
   private beginUnitTurn(u: UnitInstance) {
@@ -193,6 +224,14 @@ export class BattleScene extends Phaser.Scene {
         this.inspectedEnemy = inspectee;
         renderEnemy(inspectee, isActive);
       }
+    }
+
+    // select_unit: click an unacted player unit to make it active.
+    if (this.phase === "select_unit") {
+      if (inspectee && inspectee.template.side === "player" && !inspectee.acted && inspectee.alive) {
+        this.turn.selectPlayerUnit(inspectee);
+      }
+      return;
     }
 
     const cur = this.turn.current();
@@ -593,6 +632,27 @@ export class BattleScene extends Phaser.Scene {
     for (const child of this.unitLayer.list as Phaser.GameObjects.Container[]) {
       const u = child.getData("unit") as UnitInstance;
       child.setAlpha(u.acted ? 0.45 : 1);
+    }
+  }
+
+  // Draw a thin highlight around every player unit that hasn't acted yet.
+  // Helps the player remember at a glance who's still available during the
+  // player phase. We piggyback on the activeRing layer so it clears with it.
+  private drawSelectableHints() {
+    const g = this.activeRing;
+    g.clear();
+    if (this.phase !== "select_unit") return;
+    g.lineStyle(2, 0xffffff, 0.6);
+    for (const u of this.state.units) {
+      if (!u.alive) continue;
+      if (u.template.side !== "player") continue;
+      if (u.acted) continue;
+      g.strokeRect(
+        u.pos.x * TILE_SIZE + 1,
+        u.pos.y * TILE_SIZE + 1,
+        TILE_SIZE - 2,
+        TILE_SIZE - 2
+      );
     }
   }
 

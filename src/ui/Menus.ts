@@ -19,6 +19,7 @@ const barEl = () => document.getElementById("action-bar") as HTMLDivElement | nu
 // handler in BattleScene reads this to dispatch hotkeys.
 type BarMode =
   | { kind: "idle"; message: string }
+  | { kind: "select_unit"; unactedCount: number; onEndPhase: () => void }
   | { kind: "action"; opts: ActionMenuOptions; onChoice: (c: ActionChoice) => void; unitName: string }
   | { kind: "spell"; caster: UnitInstance; onChoice: (s: KnownSpell | null) => void };
 
@@ -31,6 +32,23 @@ function render() {
 
   if (mode.kind === "idle") {
     el.innerHTML = `<span class="empty-label">${escapeHtml(mode.message)}</span>`;
+    return;
+  }
+
+  if (mode.kind === "select_unit") {
+    const { unactedCount } = mode;
+    el.innerHTML = `
+      <span class="label">Player Phase</span>
+      <span class="empty-label">Click any of your units to act with them. ${unactedCount} unit${unactedCount === 1 ? "" : "s"} left.</span>
+      <button data-action="end-phase"><span class="key">E</span>nd Phase</button>
+    `;
+    el.querySelectorAll("button").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const cb = mode.kind === "select_unit" ? mode.onEndPhase : null;
+        setIdle("");
+        cb?.();
+      });
+    });
     return;
   }
 
@@ -129,6 +147,12 @@ export function setBarStatus(message: string) {
   setIdle(message);
 }
 
+// Show the player-phase prompt with End Phase button.
+export function showSelectUnit(unactedCount: number, onEndPhase: () => void) {
+  mode = { kind: "select_unit", unactedCount, onEndPhase };
+  render();
+}
+
 // Keyboard dispatch: invoked by BattleScene's keydown handler.
 // Returns true if the keystroke matched a current bar button.
 export function handleKey(key: string): boolean {
@@ -159,6 +183,14 @@ export function handleKey(key: string): boolean {
       const caster = mode.caster;
       setIdle("");
       cb(caster.knownSpells[i]);
+      return true;
+    }
+  }
+  if (mode.kind === "select_unit") {
+    if (k === "e") {
+      const cb = mode.onEndPhase;
+      setIdle("");
+      cb();
       return true;
     }
   }
