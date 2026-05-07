@@ -40,6 +40,38 @@
       .pane .head .meta .name { font-weight: bold; color: #fff; font-size: 15px; }
       .pane .head .meta .cls { font-size: 11px; color: #aaa; text-transform: uppercase; letter-spacing: 1px; }
       .pane.dead .head .meta .name { text-decoration: line-through; color: #777; }
+
+      /* Action / spell menus -- floating panels positioned near the active unit. */
+      .menu {
+        position: fixed;
+        background: #15171a;
+        border: 2px solid #ffe14a;
+        border-radius: 4px;
+        padding: 8px;
+        font-family: 'Courier New', Courier, monospace;
+        color: #f0f0f0;
+        box-shadow: 0 4px 12px #000a;
+        min-width: 140px;
+        z-index: 10;
+      }
+      .menu.hidden { display: none; }
+      .menu .title { font-size: 11px; color: #ffe14a; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; padding-bottom: 4px; border-bottom: 1px solid #2a2e35; }
+      .menu button {
+        display: block;
+        width: 100%;
+        text-align: left;
+        background: transparent;
+        color: #f0f0f0;
+        border: none;
+        padding: 5px 8px;
+        font-family: inherit;
+        font-size: 13px;
+        cursor: pointer;
+        border-radius: 2px;
+      }
+      .menu button:hover:not(:disabled) { background: #2a4060; }
+      .menu button:disabled { color: #555; cursor: not-allowed; }
+      .menu button .meta { float: right; color: #888; font-size: 11px; }
     </style>
   </head>
   <body>
@@ -52,6 +84,8 @@
         <div class="empty">Click an enemy to view stats</div>
       </div>
     </div>
+    <div id="action-menu" class="menu hidden"></div>
+    <div id="spell-menu" class="menu hidden"></div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

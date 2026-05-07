@@ -1,8 +1,14 @@
 // Runtime battle state. Built from a BattleMap + GameData at battle start.
 // Holds the current grid (terrain refs) and live unit instances.
 
-import { BattleMap, Character, Equipment, GameData, Terrain } from "../data/schema";
+import { BattleMap, Character, Equipment, GameData, Spell, Terrain } from "../data/schema";
 import { Coord } from "./grid";
+
+// One spell a unit knows + which tier. The tier indexes into spell.levels.
+export interface KnownSpell {
+  spell: Spell;
+  tier: number; // 1-indexed
+}
 
 export interface UnitInstance {
   instanceId: string;
@@ -11,11 +17,20 @@ export interface UnitInstance {
   hp: number;
   mp: number;
   weapon: Equipment | null;
+  knownSpells: KnownSpell[];
   alive: boolean;
   // Per-round flags: reset by TurnManager.startRound().
   hasMoved: boolean;
   hasActed: boolean;
   acted: boolean; // turn finished (cannot act again this round)
+}
+
+// Look up the level data (mp, range, damage/heal, etc.) for a known spell.
+// Clamps to the highest available tier if the unit has somehow learned a tier
+// beyond what's defined in spells.yaml.
+export function spellLevelData(known: KnownSpell) {
+  const idx = Math.min(Math.max(0, known.tier - 1), known.spell.levels.length - 1);
+  return known.spell.levels[idx];
 }
 
 export interface BattleState {
@@ -53,6 +68,9 @@ export function buildBattleState(mapId: string, data: GameData): BattleState {
   const equipById = new Map<string, Equipment>();
   for (const e of data.equipment) equipById.set(e.id, e);
 
+  const classById = new Map(data.classes.map((c) => [c.id, c]));
+  const spellById = new Map(data.spells.map((s) => [s.id, s]));
+
   const counts = new Map<string, number>();
   const units: UnitInstance[] = map.units.map((p) => {
     const tmpl = charByTemplate.get(p.template);
@@ -67,6 +85,24 @@ export function buildBattleState(mapId: string, data: GameData): BattleState {
         break;
       }
     }
+    // Resolve known spells: walk the class.learn entries and add any whose
+    // required level is <= the unit's current level. If the same spell appears
+    // multiple times (e.g., Heal at lv1 tier1, Heal at lv8 tier2), the latest
+    // qualifying entry wins.
+    const klass = classById.get(tmpl.class);
+    const learnedById = new Map<string, KnownSpell>();
+    if (klass) {
+      for (const learn of klass.learn) {
+        if (tmpl.level < learn.level) continue;
+        const spell = spellById.get(learn.spell);
+        if (!spell) continue;
+        const prev = learnedById.get(spell.id);
+        if (!prev || learn.tier > prev.tier) {
+          learnedById.set(spell.id, { spell, tier: learn.tier });
+        }
+      }
+    }
+    const knownSpells = Array.from(learnedById.values());
     return {
       instanceId: `${p.template}_${n}`,
       template: tmpl,
@@ -74,6 +110,7 @@ export function buildBattleState(mapId: string, data: GameData): BattleState {
       hp: tmpl.stats.hp,
       mp: tmpl.stats.mp,
       weapon,
+      knownSpells,
       alive: true,
       hasMoved: false,
       hasActed: false,

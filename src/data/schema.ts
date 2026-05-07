@@ -32,6 +32,9 @@ export type Character = z.infer<typeof CharacterSchema>;
 const LearnEntrySchema = z.object({
   spell: z.string(),
   level: z.number().int().positive(),
+  // Which tier (entry in spell.levels) the unit knows this spell at.
+  // 1-indexed; defaults to 1 (the first/weakest tier).
+  tier: z.number().int().positive().default(1),
 });
 
 export const ClassSchema = z.object({
