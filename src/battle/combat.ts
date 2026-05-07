@@ -1,20 +1,45 @@
-// Damage formula stub. Final formula will incorporate weapon, terrain defense,
-// crits, and class matchups. For now: max(1, atk - def) with small randomness.
+// Combat resolution. Damage formula uses effective stats (weapon + terrain).
+// Hit chance baseline 70% adjusted by AGI delta and target's evade tile bonus.
 
-export interface CombatStats {
-  atk: number;
-  def: number;
-  agi: number;
+import { BattleState, UnitInstance, effectiveStats, weaponRange } from "./state";
+import { Coord, manhattan } from "./grid";
+
+export interface AttackResult {
+  attacker: UnitInstance;
+  defender: UnitInstance;
+  hit: boolean;
+  damage: number;
+  defenderAlive: boolean;
 }
 
-export function computeAttackDamage(attacker: CombatStats, defender: CombatStats): number {
-  const base = Math.max(1, attacker.atk - defender.def);
-  const variance = 1 + (Math.random() * 0.2 - 0.1); // +/- 10%
-  return Math.max(1, Math.round(base * variance));
+export function inAttackRange(_state: BattleState, attacker: UnitInstance, target: Coord): boolean {
+  const { min, max } = weaponRange(attacker);
+  const d = manhattan(attacker.pos, target);
+  return d >= min && d <= max;
 }
 
-// Hit chance based on AGI delta. 70% baseline, +/- 2% per AGI point.
-export function computeHitChance(attacker: CombatStats, defender: CombatStats, evadeBonus = 0): number {
-  const base = 70 + (attacker.agi - defender.agi) * 2 - evadeBonus;
-  return Math.min(99, Math.max(20, base));
+export function resolveAttack(
+  state: BattleState,
+  attacker: UnitInstance,
+  defender: UnitInstance
+): AttackResult {
+  const a = effectiveStats(state, attacker);
+  const d = effectiveStats(state, defender);
+  const hitChance = Math.min(99, Math.max(20, 70 + (a.agi - d.agi) * 2 - d.evade));
+  const hit = Math.random() * 100 < hitChance;
+  let damage = 0;
+  if (hit) {
+    const base = Math.max(1, a.atk - d.def);
+    const variance = 1 + (Math.random() * 0.2 - 0.1); // +/- 10%
+    damage = Math.max(1, Math.round(base * variance));
+    defender.hp = Math.max(0, defender.hp - damage);
+    if (defender.hp <= 0) defender.alive = false;
+  }
+  return {
+    attacker,
+    defender,
+    hit,
+    damage,
+    defenderAlive: defender.alive,
+  };
 }
