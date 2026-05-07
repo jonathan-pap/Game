@@ -13,6 +13,7 @@ import { reachable } from "../battle/pathfinding";
 import { TurnManager } from "../battle/TurnManager";
 import { resolveAttack, AttackResult } from "../battle/combat";
 import { planEnemyTurn } from "../battle/ai";
+import { renderHero, renderEnemy, clearPanes } from "../ui/StatsPanel";
 
 const SIDE_COLOR: Record<"player" | "enemy", number> = {
   player: 0x4a90e2,
@@ -39,6 +40,8 @@ export class BattleScene extends Phaser.Scene {
   private phase: Phase = "idle";
   private reachableTiles = new Map<string, number>();
   private attackTargets = new Set<string>(); // "x,y" of attackable enemies
+  private inspectedHero: UnitInstance | null = null;
+  private inspectedEnemy: UnitInstance | null = null;
 
   constructor() {
     super("Battle");
@@ -48,6 +51,7 @@ export class BattleScene extends Phaser.Scene {
     this.gameData = this.registry.get("gameData") as GameData;
     this.state = buildBattleState("skirmish", this.gameData);
     this.scale.resize(this.state.cols * TILE_SIZE, this.state.rows * TILE_SIZE);
+    clearPanes();
 
     this.terrainLayer = this.add.graphics();
     this.highlightLayer = this.add.graphics();
@@ -96,12 +100,30 @@ export class BattleScene extends Phaser.Scene {
       this.phase = "select_move";
       this.computeMoveAndAttack(u);
       this.updateHud(
-        `${u.template.name} (${u.template.class}) HP ${u.hp}/${u.template.stats.hp} - blue=move, red=attack, click ${u.template.name} again to wait.`
+        `${u.template.name}'s turn - blue=move, red=attack, click ${u.template.name} again to wait.`
       );
+      this.inspectedHero = u;
+      renderHero(u, true);
+      this.refreshPanes();
     } else {
       this.phase = "animating";
       this.updateHud(`Enemy turn: ${u.template.name}`);
+      this.inspectedEnemy = u;
+      renderEnemy(u, true);
+      this.refreshPanes();
       this.runEnemyTurn(u);
+    }
+  }
+
+  // Re-render whichever units are currently displayed in the panes.
+  // Call after any state change that affects shown units (HP, position).
+  private refreshPanes() {
+    const cur = this.turn.current();
+    if (this.inspectedHero) {
+      renderHero(this.inspectedHero, this.inspectedHero === cur);
+    }
+    if (this.inspectedEnemy) {
+      renderEnemy(this.inspectedEnemy, this.inspectedEnemy === cur);
     }
   }
 
@@ -131,12 +153,27 @@ export class BattleScene extends Phaser.Scene {
   // --- player input ---
 
   private handleClick(pointer: Phaser.Input.Pointer) {
-    if (this.phase !== "select_move") return;
     const tile: Coord = {
       x: Math.floor(pointer.worldX / TILE_SIZE),
       y: Math.floor(pointer.worldY / TILE_SIZE),
     };
     if (!this.inBounds(tile)) return;
+
+    // Inspection: any click on a unit updates the corresponding pane,
+    // regardless of whose turn it is. This is the read-only side of UI.
+    const inspectee = unitAt(this.state, tile);
+    if (inspectee) {
+      const isActive = this.turn.current() === inspectee;
+      if (inspectee.template.side === "player") {
+        this.inspectedHero = inspectee;
+        renderHero(inspectee, isActive);
+      } else {
+        this.inspectedEnemy = inspectee;
+        renderEnemy(inspectee, isActive);
+      }
+    }
+
+    if (this.phase !== "select_move") return;
     const cur = this.turn.current();
     if (!cur) return;
     const key = `${tile.x},${tile.y}`;
@@ -397,6 +434,7 @@ export class BattleScene extends Phaser.Scene {
       onComplete: () => popup.destroy(),
     });
     if (result.hit) this.refreshUnitViewById(result.defender);
+    this.refreshPanes();
   }
 
   private refreshUnitViewById(u: UnitInstance) {
