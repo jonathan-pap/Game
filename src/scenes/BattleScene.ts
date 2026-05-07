@@ -97,6 +97,8 @@ export class BattleScene extends Phaser.Scene {
       padding: { x: 6, y: 4 },
     });
 
+    // Suppress the browser context menu so right-click can be a game cancel.
+    this.input.mouse?.disableContextMenu();
     this.input.on("pointerdown", this.handleClick, this);
     this.input.keyboard?.on("keydown-ESC", () => this.cancelToMenu());
     // Forward letter/number key hotkeys to the action bar.
@@ -207,6 +209,13 @@ export class BattleScene extends Phaser.Scene {
   // --- player input router ---
 
   private handleClick(pointer: Phaser.Input.Pointer) {
+    // Right-click: revert the active unit to its starting tile and free
+    // them up to be re-picked. Only valid before any irrevocable action.
+    if (pointer.rightButtonDown() || pointer.button === 2) {
+      this.handleRightClickCancel();
+      return;
+    }
+
     const tile: Coord = {
       x: Math.floor(pointer.worldX / TILE_SIZE),
       y: Math.floor(pointer.worldY / TILE_SIZE),
@@ -458,6 +467,33 @@ export class BattleScene extends Phaser.Scene {
       this.spawnPopup(h.unit.pos, text, color);
       this.refreshUnitViewById(h.unit);
     }
+  }
+
+  // --- right-click cancel: full unit-turn undo ---
+
+  private handleRightClickCancel() {
+    const cur = this.turn.current();
+    if (!cur || cur.template.side !== "player") return;
+    // Only valid before the unit takes an irrevocable action.
+    if (
+      this.phase !== "select_move" &&
+      this.phase !== "menu" &&
+      this.phase !== "select_attack_target" &&
+      this.phase !== "select_spell_target"
+    ) {
+      return;
+    }
+    if (this.preMovePos) {
+      cur.pos = { ...this.preMovePos };
+      this.redrawUnits();
+      this.preMovePos = null;
+    }
+    this.activeSpell = null;
+    this.clearHighlights();
+    hideAllMenus();
+    this.turn.cancelActiveTurn();
+    // turn.cancelActiveTurn() emits player_idle, which routes through
+    // onTurnEvent -> enterSelectUnit, restoring the pick-a-unit prompt.
   }
 
   // --- escape key cancel ---

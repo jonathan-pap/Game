@@ -130,6 +130,21 @@ export class TurnManager {
     }
   }
 
+  // Player aborts the current unit's turn before any irrevocable action
+  // (move only / target selection). The unit is NOT marked as acted, so
+  // they remain selectable. Caller is responsible for reverting position.
+  cancelActiveTurn() {
+    if (this._ended) return;
+    if (this._phase !== "player") return;
+    const cur = this._activeUnit;
+    if (!cur) return;
+    cur.hasMoved = false;
+    cur.hasActed = false;
+    // acted stays false -- they're still pickable.
+    this._activeUnit = null;
+    this.emit({ kind: "player_idle" });
+  }
+
   // Player ends their phase early (skipping any remaining unit moves).
   endPlayerPhase() {
     if (this._ended) return;
